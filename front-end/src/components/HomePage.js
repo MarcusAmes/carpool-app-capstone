@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import TopNav from './TopNav';
+import TopNavContainer from '../containers/TopNavContainer';
 
 class HomePage extends Component {
   render() {
     
     return (
       <>
-        <TopNav />
+        <TopNavContainer />
       </>
     )
   }

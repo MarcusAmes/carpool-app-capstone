@@ -1,4 +1,4 @@
-import { LOGIN_LOADING, LOGIN_ERROR, LOGIN_SUCCESS } from "../actions/userActions";
+import { LOGIN_LOADING, LOGIN_ERROR, LOGIN_SUCCESS, REGISTER_LOADING, REGISTER_SUCCESS, REGISTER_ERROR, LOGOUT_SUCCESS } from "../actions/userActions";
 
 const initState = {
   id: "",
@@ -35,6 +35,34 @@ const userReducer = (state = initState, action) => {
         lastName: action.payload.lastName,
         userError: false,
         userLoading: false
+      }
+    case REGISTER_LOADING:
+      return {
+        ...state,
+        userLoading: true
+      }
+    case REGISTER_ERROR: 
+      return {
+        ...state,
+        userError: true
+      }
+    case REGISTER_SUCCESS:
+      return {
+        ...state,
+        userError: false,
+        userLoading: false
+      }
+    case LOGOUT_SUCCESS:
+      return {
+        id: "",
+        email: "",
+        businessId: "",
+        route: {},
+        address: "",
+        lastName: "",
+        firstName: "",
+        userLoading: false,
+        userError: false
       }
     default:
       return state;

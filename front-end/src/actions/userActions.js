@@ -20,6 +20,9 @@ const registerLoading = () => ({ type: REGISTER_LOADING });
 export const REGISTER_ERROR = "REGISTER_ERROR";
 const registerError = () => ({ type: REGISTER_ERROR });
 
+export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
+const logoutSuccess = () => ({ type: LOGOUT_SUCCESS })
+
 
 //THUNKS
 
@@ -56,4 +59,10 @@ export const register = user => dispatch => {
         registerError(err)
       )
     })
+}
+
+export const logout = () => dispatch => {
+  dispatch(
+    logoutSuccess()
+  )
 }
