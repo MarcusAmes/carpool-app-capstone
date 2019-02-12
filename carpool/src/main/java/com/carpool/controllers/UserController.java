@@ -36,6 +36,12 @@ public class UserController {
         return null;
     }
 
+    @PostMapping("/register")
+    public User createUser(@RequestBody User user) {
+        this.userRepository.insert(user);
+        return user;
+    }
+
     @GetMapping("/get/{id}")
     public User userGetById(@PathVariable String id) {
         return this.userRepository.findUserById(id);
@@ -44,12 +50,6 @@ public class UserController {
     @GetMapping("/all")
     public List<User> getUsers() {
         return this.userRepository.findAll();
-    }
-
-    @PostMapping("/add")
-    public User createUser(@RequestBody User user) {
-        this.userRepository.insert(user);
-        return user;
     }
 
     @PostMapping("/add/route")

@@ -1,14 +1,20 @@
 import React, { Component } from 'react'
-import { Row, Col } from 'reactstrap';
+import { Row, Col, Button } from 'reactstrap';
 import LoginFormContainer from '../containers/LoginFormContainer';
+import { Link } from 'react-router-dom'
 
 const style ={
   left: {
     color: "white",
-    backgroundColor: "darkorange"
+    backgroundColor: "#28a745"
   },
   right: {
-    color: "darkorange"
+    marginTop: "1%",
+    color: "#28a745"
+  },
+  center: {
+    display: "flex", 
+    justifyContent: "center"
   }
 }
 
@@ -25,15 +31,16 @@ class Splash extends Component {
           </Col>
           <Col style={style.right}>
             <LoginFormContainer />
-            <h1>
-              Beat the Traffic, Meet New People, and Save the World
-            </h1>
-            <h2>
-              Login
-            </h2>
-            <h2>
-              Signup
-            </h2>
+            <div style={{...style.center, marginTop: "48%"}}>
+              <div>
+                <h2 style={{marginBottom: "5%"}}>
+                  Join the carpool world today!
+                </h2> 
+                <div style={style.center}>
+                  <Button tag={Link} to="/register" outline color="success">Sign Up</Button>
+                </div>
+              </div>
+            </div>
           </Col>
         </Row>
       </div>
