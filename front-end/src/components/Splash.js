@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Row, Col } from 'reactstrap';
+import LoginFormContainer from '../containers/LoginFormContainer';
 
 const style ={
   left: {
@@ -23,6 +24,7 @@ class Splash extends Component {
             </h1>
           </Col>
           <Col style={style.right}>
+            <LoginFormContainer />
             <h1>
               Beat the Traffic, Meet New People, and Save the World
             </h1>

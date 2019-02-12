@@ -7,6 +7,7 @@ import com.carpool.users.User;
 import com.carpool.users.UserRepository;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,17 @@ public class UserController {
         this.userRepository = userRepository;
         this.businessRepository = businessRepository;
         this.googleService = googleService;
+    }
+
+    @PostMapping("/login")
+    public User login(@RequestBody Login login) {
+        String email = login.getEmail();
+        String password = login.getPassword();
+        User user = this.userRepository.findUserByEmail(email);
+        if(user.getPassword().equals(password)) {
+            return user;
+        }
+        return null;
     }
 
     @GetMapping("/get/{id}")

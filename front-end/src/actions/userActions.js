@@ -18,11 +18,11 @@ export const login = (user) => dispatch => {
   dispatch(
     loginLoading()
   )
-  axios.post("/login", user)
+  axios.post("/users/login", user)
   .then(response => {
-    localStorage.setItem({token: response.token})
+    // localStorage.setItem({token: response.token})
     dispatch(
-      loginSuccess(response)
+      loginSuccess(response.data)
     )
   })
   .catch(err => {
