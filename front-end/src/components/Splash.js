@@ -23,6 +23,9 @@ class Splash extends Component {
             </h1>
           </Col>
           <Col style={style.right}>
+            <h1>
+              Beat the Traffic, Meet New People, and Save the World
+            </h1>
             <h2>
               Login
             </h2>
