@@ -26,10 +26,8 @@ class AddBusinessForm extends Component {
 
   _onSubmit = (e) => {
     e.preventDefault()
-    let buisnessId = this.state.buisnesses.filter(business => business.name === this.state.buisness)[0].id
-    let user = this.props.user;
-    user.businessId = buisnessId;
-    this.props.addRoute(user)
+    let businessId = this.state.buisnesses.filter(business => business.name === this.state.buisness)[0].id
+    this.props.addRoute({userId: this.props.user.id, businessId})
   }
 
   render() {

@@ -19,7 +19,7 @@ public class UserSeeder implements CommandLineRunner {
         this.userRepository = userRepository;
         this.businessRepository = businessRepository;
     }
-    private String marcusJson = "{\n" +
+    private String dennisJson = "{\n" +
             "    \"start_location\": {\n" +
             "        \"lat\": 33.8631316,\n" +
             "        \"lng\": -112.1368155\n" +
@@ -687,12 +687,12 @@ public class UserSeeder implements CommandLineRunner {
         List<Business> businesses = this.businessRepository.findAll();
 
         User marcus = new User(
-                "marcus@gmail.com",
+                "dennis@gmail.com",
                 "12345",
-                "Marcus",
-                "Ames",
+                "Dennis",
+                "Enwiya",
                 "41703 N Gavilan Peak Pkwy, Anthem, AZ 85086");
-        marcus.setSimplifiedRoute(objectMapper.readValue(marcusJson, SimplifiedRoute.class));
+        marcus.setSimplifiedRoute(objectMapper.readValue(dennisJson, SimplifiedRoute.class));
         marcus.setBusinessId(businesses.get(0).getId());
         User oscar = new User(
                 "oscar@gmail.com",

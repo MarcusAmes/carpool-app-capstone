@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -52,7 +53,9 @@ public class UserController {
     }
 
     @PostMapping("/add/route")
-    public SimplifiedRoute addRoute(@RequestBody User user) {
+    public User addRoute(@RequestBody Map<String, String> body) {
+        User user = this.userRepository.findUserById(body.get("userId"));
+        user.setBusinessId(body.get("businessId"));
         Leg leg = googleService.getRoute(user.getAddress(), this.businessRepository.findBusinessById(user.getBusinessId()).getAddress()).getRoutes().get(0).getLegs().get(0);
         List<SimplifiedStep> steps = new ArrayList<>();
         for(Step step : leg.getSteps()) {
@@ -64,18 +67,19 @@ public class UserController {
         List<User> sameBusinesses = this.userRepository.findUsersByBusinessId(user.getBusinessId());
         for(User compareUser : sameBusinesses) {
             if(!user.getId().equals(compareUser.getId()))  {
-                if(getPercent(user.getSimplifiedRoute(), compareUser.getSimplifiedRoute())) {
-                    user.addConnection(compareUser.getId());
-                    compareUser.addConnection(user.getId());
+                double percent = getPercent(user.getSimplifiedRoute(), compareUser.getSimplifiedRoute());
+                if (percent > 0.4) {
+                    user.addConnection(compareUser.getSimplified(percent));
+                    compareUser.addConnection(user.getSimplified(percent));
                     this.userRepository.save(compareUser);
                     this.userRepository.save(user);
                 }
             }
         }
-        return simplifiedRoute;
+        return user;
     }
 
-    private boolean getPercent(SimplifiedRoute user1, SimplifiedRoute user2) {
+    private double getPercent(SimplifiedRoute user1, SimplifiedRoute user2) {
         //most number of steps not distance
         SimplifiedRoute big;
         //least number of steps not distance
@@ -152,7 +156,11 @@ public class UserController {
         //useless need right weight
         double weight = smallPercent * smallDTC + bigPercent * bigDTC;
         System.out.println(weight);
-        return smallPercent > 0.6 && bigPercent > 0.4;
+        if(smallPercent > bigPercent) {
+            return smallPercent;
+        } else {
+            return bigPercent;
+        }
     }
 
     @PutMapping("/update")
@@ -160,5 +168,4 @@ public class UserController {
         this.userRepository.save(user);
         return user;
     }
-
 }

@@ -3,13 +3,11 @@ import { LOGIN_LOADING, LOGIN_ERROR, LOGIN_SUCCESS, REGISTER_LOADING, REGISTER_S
 const initState = {
   id: "",
   email: "",
-  password: "",
   businessId: "",
-  simplifiedRoute: {},
   address: "",
   lastName: "",
   firstName: "",
-  city: "",
+  connections: [],
   userLoading: false,
   userError: false
 }
@@ -30,13 +28,11 @@ const userReducer = (state = initState, action) => {
       return {
         id: action.payload.id,
         email: action.payload.email,
-        password: action.payload.password,
         businessId: action.payload.businessId,
-        simplifiedRoute: action.payload.simplifiedRoute,
         address: action.payload.address,
         firstName: action.payload.firstName,
         lastName: action.payload.lastName,
-        city: action.payload.city,
+        connections: action.payload.connections,
         userError: false,
         userLoading: false
       }
@@ -58,15 +54,14 @@ const userReducer = (state = initState, action) => {
       }
     case LOGOUT_SUCCESS:
       return {
+        ...state,
         id: "",
         email: "",
-        password: "",
         businessId: "",
-        route: {},
         address: "",
         lastName: "",
         firstName: "",
-        city: "",
+        connections: [],
         userLoading: false,
         userError: false
       }
@@ -83,7 +78,13 @@ const userReducer = (state = initState, action) => {
     case ADD_ROUTE_SUCCESS:
       return {
         ...state,
-        simplifiedRoute: action.payload,
+        id: action.payload.id,
+        email: action.payload.email,
+        businessId: action.payload.businessId,
+        address: action.payload.address,
+        firstName: action.payload.firstName,
+        lastName: action.payload.lastName,
+        connections: action.payload.connections,
         userError: false,
         userLoading: false
       }

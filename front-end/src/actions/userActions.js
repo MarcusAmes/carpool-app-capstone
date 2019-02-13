@@ -41,7 +41,6 @@ export const login = (user) => dispatch => {
   )
   axios.post("/users/login", user)
   .then(response => {
-    // localStorage.setItem({token: response.token})
     dispatch(
       loginSuccess(response.data)
     )
