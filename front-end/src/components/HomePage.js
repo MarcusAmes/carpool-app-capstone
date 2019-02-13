@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import AddBusinessFormContainer from '../containers/AddBusinessFormContainer';
 import ConnectCardContainer from '../containers/ConnectCardContainer';
 import { ListGroup } from 'reactstrap';
+import ConnectionMap from './ConnectionMap'
 
 
 
@@ -30,9 +31,12 @@ class HomePage extends Component {
     const cards = sortedConnections.map(connection => <ConnectCardContainer connection={connection} key={connection.id} />)
     
     return (
-      <ListGroup>
-        {cards}
-      </ListGroup>
+      <>
+        <ConnectionMap directions={this.props.user.simplifiedRoute} />
+        <ListGroup>
+          {cards}
+        </ListGroup>
+      </>
     )
   }
 }

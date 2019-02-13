@@ -7,6 +7,7 @@ const initState = {
   address: "",
   lastName: "",
   firstName: "",
+  simplifiedRoute: {},
   connections: [],
   userLoading: false,
   userError: false
@@ -32,6 +33,7 @@ const userReducer = (state = initState, action) => {
         address: action.payload.address,
         firstName: action.payload.firstName,
         lastName: action.payload.lastName,
+        simplifiedRoute: action.payload.simplifiedRoute,
         connections: action.payload.connections,
         userError: false,
         userLoading: false
@@ -61,6 +63,7 @@ const userReducer = (state = initState, action) => {
         address: "",
         lastName: "",
         firstName: "",
+        simplifiedRoute: {},
         connections: [],
         userLoading: false,
         userError: false
@@ -84,6 +87,7 @@ const userReducer = (state = initState, action) => {
         address: action.payload.address,
         firstName: action.payload.firstName,
         lastName: action.payload.lastName,
+        simplifiedRoute: action.payload.simplifiedRoute,
         connections: action.payload.connections,
         userError: false,
         userLoading: false
