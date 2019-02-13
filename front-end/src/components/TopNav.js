@@ -13,7 +13,7 @@ class TopNav extends Component {
   render() {
     
     return (
-      <Navbar color="light" light expand="md">
+      <Navbar color="success" dark expand="md">
         <Container>
           <NavbarBrand tag={Link} to="/home">Carpool</NavbarBrand>
           <Nav className="ml-auto" navbar>
@@ -23,8 +23,8 @@ class TopNav extends Component {
             <NavItem>
               <NavLink tag={Link} to="/profile">Profile</NavLink>
             </NavItem>
-            <NavItem>
-              <NavLink onClick={this.props.logout}>Logout</NavLink>
+            <NavItem style={{cursor: "pointer"}}>
+              <NavLink onClick={() => {this.props.logout(); this.props.history.push("/");}}>Logout</NavLink>
             </NavItem>
           </Nav>
         </Container>

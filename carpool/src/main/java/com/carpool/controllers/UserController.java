@@ -7,7 +7,6 @@ import com.carpool.users.User;
 import com.carpool.users.UserRepository;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,13 +64,18 @@ public class UserController {
         List<User> sameBusinesses = this.userRepository.findUsersByBusinessId(user.getBusinessId());
         for(User compareUser : sameBusinesses) {
             if(!user.getId().equals(compareUser.getId()))  {
-                getPercent(user.getSimplifiedRoute(), compareUser.getSimplifiedRoute());
+                if(getPercent(user.getSimplifiedRoute(), compareUser.getSimplifiedRoute())) {
+                    user.addConnection(compareUser.getId());
+                    compareUser.addConnection(user.getId());
+                    this.userRepository.save(compareUser);
+                    this.userRepository.save(user);
+                }
             }
         }
         return simplifiedRoute;
     }
 
-    private void getPercent(SimplifiedRoute user1, SimplifiedRoute user2) {
+    private boolean getPercent(SimplifiedRoute user1, SimplifiedRoute user2) {
         //most number of steps not distance
         SimplifiedRoute big;
         //least number of steps not distance
@@ -148,12 +152,10 @@ public class UserController {
         //useless need right weight
         double weight = smallPercent * smallDTC + bigPercent * bigDTC;
         System.out.println(weight);
-        if(smallPercent > 0.6 && bigPercent > 0.4) {
-            System.out.println("connect");
-        }
+        return smallPercent > 0.6 && bigPercent > 0.4;
     }
 
-    @PutMapping("/update}")
+    @PutMapping("/update")
     public User updateUser(@RequestBody User user) {
         this.userRepository.save(user);
         return user;

@@ -21,7 +21,8 @@ class RegisterForm extends Component {
       password: this.state.password,
       firstName: this.state.firstName,
       lastName: this.state.lastName,
-      address
+      address,
+      city: this.state.city
     }
     this.props.register(obj)
   }

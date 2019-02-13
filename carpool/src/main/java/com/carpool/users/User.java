@@ -6,6 +6,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @Document(collection = "Users")
 public class User {
     @Id
@@ -16,6 +20,7 @@ public class User {
     private final String lastName;
     private final String address;
     private String businessId;
+    private List<String> connections;
 
     private SimplifiedRoute simplifiedRoute;
 
@@ -70,5 +75,35 @@ public class User {
 
     public String getId() {
         return id;
+    }
+
+    public List<String> getConnections() {
+        return connections;
+    }
+
+    public void setConnections(List<String> connections) {
+        this.connections = connections;
+    }
+
+    public void addConnection(String userId) {
+        if(this.connections == null) {
+            ArrayList<String> temp = new ArrayList<>();
+            temp.add(userId);
+            this.setConnections(temp);
+        } else {
+            this.connections.add(userId);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", address='" + address + '\'' +
+                '}';
     }
 }

@@ -31,7 +31,7 @@ class Splash extends Component {
           </Col>
           <Col style={style.right}>
             <LoginFormContainer />
-            <div style={{...style.center, marginTop: "48%"}}>
+            <div style={{...style.center, marginTop: "40%"}}>
               <div>
                 <h2 style={{marginBottom: "5%"}}>
                   Join the carpool world today!

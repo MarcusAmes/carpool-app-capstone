@@ -23,6 +23,15 @@ const registerError = () => ({ type: REGISTER_ERROR });
 export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
 const logoutSuccess = () => ({ type: LOGOUT_SUCCESS })
 
+export const ADD_ROUTE_SUCCESS = "ADD_ROUTE_SUCCESS";
+const addRouteSuccess = (user) => ({ type: ADD_ROUTE_SUCCESS, payload: user });
+
+export const ADD_ROUTE_LOADING = "ADD_ROUTE_LOADING";
+const addRouteLoading = () => ({ type: ADD_ROUTE_LOADING });
+
+export const ADD_ROUTE_ERROR = "ADD_ROUTE_ERROR";
+const addRouteError = ( ) => ({ type: ADD_ROUTE_ERROR });
+
 
 //THUNKS
 
@@ -65,4 +74,21 @@ export const logout = () => dispatch => {
   dispatch(
     logoutSuccess()
   )
+}
+
+export const addRoute = (user) => dispatch => {
+  dispatch(
+    addRouteLoading()
+  )
+  axios.post("/users/add/route", user)
+  .then(response => {
+    dispatch(
+      addRouteSuccess(response.data)
+    )
+  })
+  .catch(err => {
+    dispatch(
+      addRouteError()
+    )
+  })
 }
