@@ -1,10 +1,23 @@
 import { connect } from 'react-redux'
 import HomePage from '../components/HomePage'
+import { fetchConnections } from '../actions/connectionActions';
 
-const mapStateToProps = ({user}) => {
+const mapStateToProps = ({user, connection}) => {
   return {
-    user
+    user,
+    userConnections: user.connections.filter(()=>true),
+    connections: connection.connections
   }
 }
 
-export default connect(mapStateToProps)(HomePage)
+const mapDispatchToProps = dispatch => {
+  return {
+    fetchConnections: (connections) => {
+      dispatch (
+        fetchConnections(connections)
+      )
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage)

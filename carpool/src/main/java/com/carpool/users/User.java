@@ -1,5 +1,6 @@
 package com.carpool.users;
 
+import com.carpool.google.LatAndLng;
 import com.carpool.google.SimplifiedRoute;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -20,7 +21,7 @@ public class User {
     private final String lastName;
     private final String address;
     private String businessId;
-    private List<SimplifiedUser> connections;
+    private List<String> connections;
 
     private SimplifiedRoute simplifiedRoute;
 
@@ -77,27 +78,28 @@ public class User {
         return id;
     }
 
-    public List<SimplifiedUser> getConnections() {
+    public List<String> getConnections() {
         return connections;
     }
 
-    public void setConnections(List<SimplifiedUser> connections) {
+    public void setConnections(List<String> connections) {
         this.connections = connections;
     }
 
-    public void addConnection(SimplifiedUser user) {
+    public void addConnection(String connectionId) {
         if(this.connections == null) {
-            ArrayList<SimplifiedUser> temp = new ArrayList<>();
-            temp.add(user);
+            ArrayList<String> temp = new ArrayList<>();
+            temp.add(connectionId);
             this.setConnections(temp);
         } else {
-            this.connections.add(user);
+            this.connections.add(connectionId);
         }
     }
 
     @JsonIgnore
-    public SimplifiedUser getSimplified(double percent) {
-        return new SimplifiedUser(getId(), getEmail(), getFirstName(), getLastName(), getBusinessId(), percent);
+    public SimplifiedUser getSimplified() {
+        LatAndLng start = getSimplifiedRoute().getStart_location();
+        return new SimplifiedUser(getId(), getEmail(), getFirstName(), getLastName(), getBusinessId(), start.getLat(), start.getLng());
     }
 
 }

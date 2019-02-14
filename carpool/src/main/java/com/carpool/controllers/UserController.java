@@ -1,8 +1,11 @@
 package com.carpool.controllers;
 
 import com.carpool.business.BusinessRepository;
+import com.carpool.connection.Connection;
+import com.carpool.connection.ConnectionRepository;
 import com.carpool.google.*;
 import com.carpool.google.config.GoogleService;
+import com.carpool.users.SimplifiedUser;
 import com.carpool.users.User;
 import com.carpool.users.UserRepository;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +20,13 @@ import java.util.Map;
 public class UserController {
     private final UserRepository userRepository;
     private final BusinessRepository businessRepository;
+    private final ConnectionRepository connectionRepository;
     private final GoogleService googleService;
 
-    public UserController(UserRepository userRepository, BusinessRepository businessRepository, GoogleService googleService) {
+    public UserController(UserRepository userRepository, BusinessRepository businessRepository, ConnectionRepository connectionRepository, GoogleService googleService) {
         this.userRepository = userRepository;
         this.businessRepository = businessRepository;
+        this.connectionRepository = connectionRepository;
         this.googleService = googleService;
     }
 
@@ -67,10 +72,10 @@ public class UserController {
         List<User> sameBusinesses = this.userRepository.findUsersByBusinessId(user.getBusinessId());
         for(User compareUser : sameBusinesses) {
             if(!user.getId().equals(compareUser.getId()))  {
-                double percent = getPercent(user.getSimplifiedRoute(), compareUser.getSimplifiedRoute());
-                if (percent > 0.4) {
-                    user.addConnection(compareUser.getSimplified(percent));
-                    compareUser.addConnection(user.getSimplified(percent));
+                String connectionId = getConnection(user, compareUser);
+                if (connectionId != null) {
+                    user.addConnection(connectionId);
+                    compareUser.addConnection(connectionId);
                     this.userRepository.save(compareUser);
                     this.userRepository.save(user);
                 }
@@ -79,11 +84,13 @@ public class UserController {
         return user;
     }
 
-    private double getPercent(SimplifiedRoute user1, SimplifiedRoute user2) {
+    private String getConnection(User user1, User user2) {
         //most number of steps not distance
         SimplifiedRoute big;
+        User bigUser;
         //least number of steps not distance
         SimplifiedRoute small;
+        User smallUser;
         //difference of steps
         int dif;
 
@@ -100,12 +107,16 @@ public class UserController {
         //finds convergence point
         boolean convergence = false;
 
-        if(user1.getSimplifiedStep().size() < user2.getSimplifiedStep().size()) {
-            small = user1;
-            big = user2;
+        if(user1.getSimplifiedRoute().getSimplifiedStep().size() < user2.getSimplifiedRoute().getSimplifiedStep().size()) {
+            small = user1.getSimplifiedRoute();
+            smallUser = user1;
+            big = user2.getSimplifiedRoute();
+            bigUser = user2;
         } else {
-            small = user2;
-            big = user1;
+            small = user2.getSimplifiedRoute();
+            smallUser = user2;
+            big = user1.getSimplifiedRoute();
+            bigUser = user1;
         }
         dif = big.getSimplifiedStep().size() - small.getSimplifiedStep().size();
 
@@ -127,10 +138,6 @@ public class UserController {
                 countSimilar++;
                 distanceSimilar += smallStep.getDistance().getValue();
                 if(!convergence) {
-                    //5 miles distance to convergence
-                    if(smallDTC > 8000) {
-                        //Don't add it
-                    }
                     convergence = true;
                 }
             } else if (smallStep.getEnd_location().equals(bigStep.getEnd_location())) {
@@ -156,11 +163,26 @@ public class UserController {
         //useless need right weight
         double weight = smallPercent * smallDTC + bigPercent * bigDTC;
         System.out.println(weight);
-        if(smallPercent > bigPercent) {
-            return smallPercent;
+        if(smallPercent < bigPercent) {
+            Connection connection = new Connection(smallUser.getSimplified(), bigUser.getSimplified(), bigPercent);
+            return this.connectionRepository.insert(connection).getId();
         } else {
-            return bigPercent;
+            Connection connection = new Connection(bigUser.getSimplified(), smallUser.getSimplified(), smallPercent);
+            return this.connectionRepository.insert(connection).getId();
         }
+    }
+
+    @GetMapping("/connect/{connectionId}/{userId}")
+    public Connection addConnection(@PathVariable String connectionId, @PathVariable String userId) {
+        User user = this.userRepository.findUserById(userId);
+        Connection connection = this.connectionRepository.findConnectionById(connectionId);
+        if(connection.getUser1().getId().equals(user.getId())) {
+            connection.setUser1Accept(true);
+        } else {
+            connection.setUser2Accept(true);
+        }
+        this.connectionRepository.save(connection);
+        return connection;
     }
 
     @PutMapping("/update")

@@ -2,11 +2,17 @@ import React, { Component } from 'react'
 import AddBusinessFormContainer from '../containers/AddBusinessFormContainer';
 import ConnectCardContainer from '../containers/ConnectCardContainer';
 import { ListGroup } from 'reactstrap';
-import ConnectionMap from './ConnectionMap'
+import ConnectionMapContainer from '../containers/ConnectionMapContainer';
 
 
 
 class HomePage extends Component {
+
+  componentDidMount() {
+    if (this.props.userConnections.length) {
+      this.props.fetchConnections(this.props.user.connections)
+    }
+  }
 
   render() {
 
@@ -27,12 +33,13 @@ class HomePage extends Component {
       )
     }
 
-    const sortedConnections = this.props.user.connections.sort((a, b) => b.connectionPercent - a.connectionPercent)
+    const sortedConnections = this.props.connections.sort((a, b) => b.percent - a.percent)
     const cards = sortedConnections.map(connection => <ConnectCardContainer connection={connection} key={connection.id} />)
     
     return (
       <>
-        <ConnectionMap directions={this.props.user.simplifiedRoute} />
+        {this.props.connections.filter(connection => connection.user1Accept && connection.user2Accept).length > 0 &&
+        <ConnectionMapContainer />}
         <ListGroup>
           {cards}
         </ListGroup>

@@ -9,7 +9,8 @@ public class SimplifiedUser {
     private final String firstName;
     private final String lastName;
     private final String businessId;
-    private final double connectionPercent;
+    private final double lat;
+    private final double lng;
 
     @JsonCreator
     public SimplifiedUser(@JsonProperty("id") String id,
@@ -17,13 +18,15 @@ public class SimplifiedUser {
                           @JsonProperty("firstName") String firstName,
                           @JsonProperty("lastName") String lastName,
                           @JsonProperty("businessId") String businessId,
-                          @JsonProperty("connectionPercent") double connectionPercent) {
+                          @JsonProperty("lat") double lat,
+                          @JsonProperty("lng") double lng) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.businessId = businessId;
-        this.connectionPercent = connectionPercent;
+        this.lat = lat;
+        this.lng = lng;
     }
 
     public String getId() {
@@ -46,7 +49,11 @@ public class SimplifiedUser {
         return businessId;
     }
 
-    public double getConnectionPercent() {
-        return connectionPercent;
+    public double getLat() {
+        return lat;
+    }
+
+    public double getLng() {
+        return lng;
     }
 }

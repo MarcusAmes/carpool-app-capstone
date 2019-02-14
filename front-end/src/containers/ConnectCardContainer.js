@@ -1,10 +1,21 @@
 import { connect } from 'react-redux'
 import ConnectCard from '../components/ConnectCard'
+import { addConnection } from '../actions/connectionActions';
 
-const mapDispatchToProps = dispatch => {
+const mapStateToProps = ({user}) => {
   return {
-    
+    id: user.id
   }
 }
 
-export default connect(null, mapDispatchToProps)(ConnectCard)
+const mapDispatchToProps = dispatch => {
+  return {
+    addConnection: (connectionId, userId) => {
+      dispatch(
+        addConnection(connectionId, userId)
+      )
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ConnectCard)
