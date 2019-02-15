@@ -24,7 +24,7 @@ class RegisterForm extends Component {
       address,
       city: this.state.city
     }
-    this.props.register(obj)
+    this.props.register(obj, this.props.history)
   }
 
   _onChange = ({target}) => {

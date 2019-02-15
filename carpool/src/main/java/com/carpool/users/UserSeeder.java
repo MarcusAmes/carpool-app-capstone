@@ -2,6 +2,8 @@ package com.carpool.users;
 
 import com.carpool.business.Business;
 import com.carpool.business.BusinessRepository;
+import com.carpool.connection.Connection;
+import com.carpool.connection.ConnectionRepository;
 import com.carpool.google.SimplifiedRoute;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.CommandLineRunner;
@@ -12,12 +14,14 @@ import java.util.List;
 
 @Component
 public class UserSeeder implements CommandLineRunner {
-    private UserRepository userRepository;
-    private BusinessRepository businessRepository;
+    private final UserRepository userRepository;
+    private final BusinessRepository businessRepository;
+    private final ConnectionRepository connectionRepository;
 
-    public UserSeeder(UserRepository userRepository, BusinessRepository businessRepository) {
+    public UserSeeder(UserRepository userRepository, BusinessRepository businessRepository, ConnectionRepository connectionRepository) {
         this.userRepository = userRepository;
         this.businessRepository = businessRepository;
+        this.connectionRepository = connectionRepository;
     }
     private String dennisJson = "{\n" +
             "    \"start_location\": {\n" +
@@ -681,6 +685,7 @@ public class UserSeeder implements CommandLineRunner {
         //Drops all
         this.userRepository.deleteAll();
         this.businessRepository.deleteAll();
+        this.connectionRepository.deleteAll();
 
         Business galvanize = new Business("Galvanize", "515 E Grant St, Phoenix, AZ 85004", "Phoenix");
         this.businessRepository.save(galvanize);

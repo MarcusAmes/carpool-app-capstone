@@ -11,8 +11,7 @@ class LoginForm extends Component {
 
   _onSubmit = (e) => {
     e.preventDefault();
-    this.props.login(this.state);
-    this.props.history.push("/home")
+    this.props.login(this.state, this.props.history);
   }
 
   _onChange = ({target}) => {

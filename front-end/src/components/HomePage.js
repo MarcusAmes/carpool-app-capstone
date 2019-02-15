@@ -4,12 +4,11 @@ import ConnectCardContainer from '../containers/ConnectCardContainer';
 import { ListGroup } from 'reactstrap';
 import ConnectionMapContainer from '../containers/ConnectionMapContainer';
 
-
-
 class HomePage extends Component {
 
   componentDidMount() {
-    if (this.props.userConnections.length) {
+    this.props.fetchUserConnections(this.props.user.id)
+    if (this.props.user.connections && this.props.user.connections.length) {
       this.props.fetchConnections(this.props.user.connections)
     }
   }
@@ -25,7 +24,7 @@ class HomePage extends Component {
       )
     }
 
-    if(!this.props.user.connections.length) {
+    if (!this.props.user.connections || !this.props.user.connections.length) {
       return (
         <>
           <h2> No Matches yet. Check back soon</h2>
@@ -38,6 +37,7 @@ class HomePage extends Component {
     
     return (
       <>
+        {this.props.user.connections.length !== this.props.connections.length ? this.props.fetchConnections(this.props.user.connections) : null}
         {this.props.connections.filter(connection => connection.user1Accept && connection.user2Accept).length > 0 &&
         <ConnectionMapContainer />}
         <ListGroup>

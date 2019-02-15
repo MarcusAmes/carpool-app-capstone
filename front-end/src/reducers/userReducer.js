@@ -1,4 +1,4 @@
-import { LOGIN_LOADING, LOGIN_ERROR, LOGIN_SUCCESS, REGISTER_LOADING, REGISTER_SUCCESS, REGISTER_ERROR, LOGOUT_SUCCESS, ADD_ROUTE_LOADING, ADD_ROUTE_SUCCESS, ADD_ROUTE_ERROR } from "../actions/userActions";
+import { LOGIN_LOADING, LOGIN_ERROR, LOGIN_SUCCESS, REGISTER_LOADING, REGISTER_SUCCESS, REGISTER_ERROR, LOGOUT_SUCCESS, ADD_ROUTE_LOADING, ADD_ROUTE_SUCCESS, ADD_ROUTE_ERROR, FETCH_USER_CONNECTIONS } from "../actions/userActions";
 
 const initState = {
   id: "",
@@ -79,6 +79,20 @@ const userReducer = (state = initState, action) => {
         userError: true
       }
     case ADD_ROUTE_SUCCESS:
+      return {
+        ...state,
+        id: action.payload.id,
+        email: action.payload.email,
+        businessId: action.payload.businessId,
+        address: action.payload.address,
+        firstName: action.payload.firstName,
+        lastName: action.payload.lastName,
+        simplifiedRoute: action.payload.simplifiedRoute,
+        connections: action.payload.connections,
+        userError: false,
+        userLoading: false
+      }
+    case FETCH_USER_CONNECTIONS:
       return {
         ...state,
         id: action.payload.id,

@@ -21,7 +21,7 @@ class TopNav extends Component {
               <NavLink tag={Link} to="/connections">Connections</NavLink>
             </NavItem>
             <NavItem>
-              <NavLink tag={Link} to="/profile">Profile</NavLink>
+              <NavLink tag={Link} to="/home/profile">Profile</NavLink>
             </NavItem>
             <NavItem style={{cursor: "pointer"}}>
               <NavLink onClick={() => {this.props.logout(); this.props.history.push("/");}}>Logout</NavLink>

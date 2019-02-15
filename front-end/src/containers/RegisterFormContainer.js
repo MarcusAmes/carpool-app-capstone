@@ -4,9 +4,9 @@ import { register } from '../actions/userActions';
 
 const mapDispatchToProps = dispatch => {
   return {
-    register: (user) => {
+    register: (user, history) => {
       dispatch(
-        register(user)
+        register(user, history)
       )
     }
   }

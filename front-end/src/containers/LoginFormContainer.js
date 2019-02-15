@@ -4,9 +4,9 @@ import { login } from '../actions/userActions';
 
 const mapDispatchToProps = dispatch => {
   return {
-    login: (user) => {
+    login: (user, history) => {
       dispatch (
-        login(user)
+        login(user, history)
       )
     }
   }

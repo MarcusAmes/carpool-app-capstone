@@ -1,4 +1,4 @@
-import { FETCH_CONNECTIONS_LOADING, FETCH_CONNECTIONS_ERROR, FETCH_CONNECTIONS_SUCCESS, ADD_CONNECTION_LOADING, ADD_CONNECTION_ERROR, ADD_CONNECTION_SUCCESS } from "../actions/connectionActions";
+import { FETCH_CONNECTIONS_LOADING, FETCH_CONNECTIONS_ERROR, FETCH_CONNECTIONS_SUCCESS, ADD_CONNECTION_LOADING, ADD_CONNECTION_ERROR, ADD_CONNECTION_SUCCESS, LOGOUT_SUCCESS } from "../actions/connectionActions";
 
 const initState = {
   connections: [],
@@ -44,6 +44,13 @@ const connectionReducer = (state = initState, action) => {
         connectionsLoading: false,
         connectionsError: false
       } 
+    case LOGOUT_SUCCESS:
+      return {
+        ...state,
+        connections: [],
+        connectionsLoading: false,
+        connectionsError: false
+      }
     default:
       return state
   }

@@ -5,7 +5,6 @@ import com.carpool.connection.Connection;
 import com.carpool.connection.ConnectionRepository;
 import com.carpool.google.*;
 import com.carpool.google.config.GoogleService;
-import com.carpool.users.SimplifiedUser;
 import com.carpool.users.User;
 import com.carpool.users.UserRepository;
 import org.springframework.web.bind.annotation.*;
@@ -151,25 +150,28 @@ public class UserController {
 
         double smallPercent = distanceSimilar / small.getDistance().getValue();
         double bigPercent = distanceSimilar / big.getDistance().getValue();
-        System.out.println("connected distance:" + distanceSimilar);
-        System.out.println("small percent same:" + smallPercent);
-        System.out.println("small distance:" + small.getDistance().getValue());
-        System.out.println("big percent same:" + bigPercent);
-        System.out.println("big distance:" + big.getDistance().getValue());
-
-        System.out.println("small distance to convergence" + smallDTC);
-        System.out.println("big distance to convergence" + bigDTC);
+//        System.out.println("connected distance:" + distanceSimilar);
+//        System.out.println("small percent same:" + smallPercent);
+//        System.out.println("small distance:" + small.getDistance().getValue());
+//        System.out.println("big percent same:" + bigPercent);
+//        System.out.println("big distance:" + big.getDistance().getValue());
+//
+//        System.out.println("small distance to convergence" + smallDTC);
+//        System.out.println("big distance to convergence" + bigDTC);
 
         //useless need right weight
-        double weight = smallPercent * smallDTC + bigPercent * bigDTC;
-        System.out.println(weight);
-        if(smallPercent < bigPercent) {
-            Connection connection = new Connection(smallUser.getSimplified(), bigUser.getSimplified(), bigPercent);
-            return this.connectionRepository.insert(connection).getId();
-        } else {
-            Connection connection = new Connection(bigUser.getSimplified(), smallUser.getSimplified(), smallPercent);
-            return this.connectionRepository.insert(connection).getId();
+//        double weight = smallPercent * smallDTC + bigPercent * bigDTC;
+//        System.out.println(weight);
+        if(smallPercent > 0.5 || bigPercent > 0.5){
+            if(smallPercent < bigPercent) {
+                Connection connection = new Connection(smallUser.getSimplified(), bigUser.getSimplified(), bigPercent);
+                return this.connectionRepository.insert(connection).getId();
+            } else {
+                Connection connection = new Connection(bigUser.getSimplified(), smallUser.getSimplified(), smallPercent);
+                return this.connectionRepository.insert(connection).getId();
+            }
         }
+        return null;
     }
 
     @GetMapping("/connect/{connectionId}/{userId}")

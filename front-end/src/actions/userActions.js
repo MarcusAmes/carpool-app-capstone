@@ -32,10 +32,13 @@ const addRouteLoading = () => ({ type: ADD_ROUTE_LOADING });
 export const ADD_ROUTE_ERROR = "ADD_ROUTE_ERROR";
 const addRouteError = ( ) => ({ type: ADD_ROUTE_ERROR });
 
+export const FETCH_USER_CONNECTIONS = "FETCH_USER_CONNECTIONS";
+const fetchUserConnections = (user) => ({ type: FETCH_USER_CONNECTIONS, payload: user })
+
 
 //THUNKS
 
-export const login = (user) => dispatch => {
+export const login = (user, history) => dispatch => {
   dispatch(
     loginLoading()
   )
@@ -44,6 +47,7 @@ export const login = (user) => dispatch => {
     dispatch(
       loginSuccess(response.data)
     )
+    history.push("/home")
   })
   .catch(err => {
     dispatch(
@@ -52,7 +56,7 @@ export const login = (user) => dispatch => {
   })
 }
 
-export const register = user => dispatch => {
+export const register = (user, history) => dispatch => {
   dispatch(
     registerLoading()
   )
@@ -61,6 +65,7 @@ export const register = user => dispatch => {
       dispatch(
         registerSuccess(response.data)
       )
+      history.push("/")
     })
     .catch(err => {
       dispatch(
@@ -88,6 +93,15 @@ export const addRoute = (user) => dispatch => {
   .catch(err => {
     dispatch(
       addRouteError()
+    )
+  })
+}
+
+export const fetchUserConnection = (id) => dispatch => {
+  axios.get(`/users/get/${id}`)
+  .then(response => {
+    dispatch(
+      fetchUserConnections(response.data)
     )
   })
 }
