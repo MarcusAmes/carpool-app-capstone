@@ -3,6 +3,12 @@ import TopNav from '../components/TopNav'
 import { logout } from '../actions/userActions';
 import { logoutC } from '../actions/connectionActions';
 
+const mapStateToProps = ({user}) => {
+  return {
+    userId: user.id
+  }
+}
+
 const mapDispatchToProps = dispatch => {
   return {
     logout: () => {
@@ -16,4 +22,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(null, mapDispatchToProps)(TopNav)
+export default connect(mapStateToProps, mapDispatchToProps)(TopNav)

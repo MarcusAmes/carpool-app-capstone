@@ -15,13 +15,13 @@ class TopNav extends Component {
     return (
       <Navbar color="success" dark expand="md">
         <Container>
-          <NavbarBrand tag={Link} to="/home">Carpool</NavbarBrand>
+          <NavbarBrand tag={Link} to="/carpool/home">Carpool</NavbarBrand>
           <Nav className="ml-auto" navbar>
             <NavItem>
-              <NavLink tag={Link} to="/connections">Connections</NavLink>
+              <NavLink tag={Link} to="/carpool/connections">Connections</NavLink>
             </NavItem>
             <NavItem>
-              <NavLink tag={Link} to="/home/profile">Profile</NavLink>
+              <NavLink tag={Link} to={`/carpool/profile/${this.props.userId}`}>Profile</NavLink>
             </NavItem>
             <NavItem style={{cursor: "pointer"}}>
               <NavLink onClick={() => {this.props.logout(); this.props.history.push("/");}}>Logout</NavLink>

@@ -5,6 +5,7 @@ import com.carpool.connection.Connection;
 import com.carpool.connection.ConnectionRepository;
 import com.carpool.google.*;
 import com.carpool.google.config.GoogleService;
+import com.carpool.users.SimplifiedUser;
 import com.carpool.users.User;
 import com.carpool.users.UserRepository;
 import org.springframework.web.bind.annotation.*;
@@ -49,6 +50,12 @@ public class UserController {
     @GetMapping("/get/{id}")
     public User userGetById(@PathVariable String id) {
         return this.userRepository.findUserById(id);
+    }
+
+    @GetMapping("/get/simple/{id}")
+    public SimplifiedUser userSimpleGetById(@PathVariable String id) {
+        User user = this.userRepository.findUserById(id);
+        return new SimplifiedUser(user.getId(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getBusinessId(), 0.0, 0.0);
     }
 
     @GetMapping("/all")

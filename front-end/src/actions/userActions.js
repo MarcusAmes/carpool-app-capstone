@@ -35,7 +35,6 @@ const addRouteError = ( ) => ({ type: ADD_ROUTE_ERROR });
 export const FETCH_USER_CONNECTIONS = "FETCH_USER_CONNECTIONS";
 const fetchUserConnections = (user) => ({ type: FETCH_USER_CONNECTIONS, payload: user })
 
-
 //THUNKS
 
 export const login = (user, history) => dispatch => {
@@ -47,7 +46,7 @@ export const login = (user, history) => dispatch => {
     dispatch(
       loginSuccess(response.data)
     )
-    history.push("/home")
+    history.push("/carpool/home")
   })
   .catch(err => {
     dispatch(
@@ -105,3 +104,5 @@ export const fetchUserConnection = (id) => dispatch => {
     )
   })
 }
+
+
