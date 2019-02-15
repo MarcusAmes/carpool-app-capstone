@@ -7,6 +7,8 @@ import com.carpool.connection.ConnectionRepository;
 import com.carpool.google.SimplifiedRoute;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -17,11 +19,13 @@ public class UserSeeder implements CommandLineRunner {
     private final UserRepository userRepository;
     private final BusinessRepository businessRepository;
     private final ConnectionRepository connectionRepository;
+    private final PasswordEncoder encoder;
 
-    public UserSeeder(UserRepository userRepository, BusinessRepository businessRepository, ConnectionRepository connectionRepository) {
+    public UserSeeder(UserRepository userRepository, BusinessRepository businessRepository, ConnectionRepository connectionRepository ) {
         this.userRepository = userRepository;
         this.businessRepository = businessRepository;
         this.connectionRepository = connectionRepository;
+        this.encoder = new BCryptPasswordEncoder();
     }
     private String dennisJson = "{\n" +
             "    \"start_location\": {\n" +
@@ -693,7 +697,7 @@ public class UserSeeder implements CommandLineRunner {
 
         User marcus = new User(
                 "dennis@gmail.com",
-                "12345",
+                encoder.encode("12345"),
                 "Dennis",
                 "Enwiya",
                 "41703 N Gavilan Peak Pkwy, Anthem, AZ 85086");
@@ -701,7 +705,7 @@ public class UserSeeder implements CommandLineRunner {
         marcus.setBusinessId(businesses.get(0).getId());
         User oscar = new User(
                 "oscar@gmail.com",
-                "12345",
+                encoder.encode("12345"),
                 "Oscar",
                 "Sandoval",
                 "2550 W Happy Valley Rd, Phoenix, AZ 85085");
@@ -709,7 +713,7 @@ public class UserSeeder implements CommandLineRunner {
         oscar.setBusinessId(businesses.get(0).getId());
         User harrison = new User(
                 "harrison@gmail.com",
-                "12345",
+                encoder.encode("12345"),
                 "Harrison",
                 "Van Nort",
                 "1 Cardinals Dr, Glendale, AZ 85305");

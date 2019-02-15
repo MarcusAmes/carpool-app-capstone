@@ -16,14 +16,14 @@ public class User {
     @Id
     private String id;
     private final String email;
-    private final String password;
+    private String password;
     private final String firstName;
     private final String lastName;
     private final String address;
     private String businessId;
     private List<String> connections;
-
     private SimplifiedRoute simplifiedRoute;
+    private String token;
 
     @JsonCreator
     User(@JsonProperty("email") String email,
@@ -94,6 +94,18 @@ public class User {
         } else {
             this.connections.add(connectionId);
         }
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     @JsonIgnore

@@ -8,6 +8,7 @@ const initState = {
   lastName: "",
   firstName: "",
   simplifiedRoute: {},
+  token: "",
   connections: [],
   userLoading: false,
   userError: false
@@ -26,6 +27,7 @@ const userReducer = (state = initState, action) => {
         userError: true
       }
     case LOGIN_SUCCESS:
+      localStorage.setItem("token", action.payload.token)
       return {
         id: action.payload.id,
         email: action.payload.email,
@@ -35,6 +37,7 @@ const userReducer = (state = initState, action) => {
         lastName: action.payload.lastName,
         simplifiedRoute: action.payload.simplifiedRoute,
         connections: action.payload.connections,
+        token: action.payload.token,
         userError: false,
         userLoading: false
       }
@@ -89,6 +92,7 @@ const userReducer = (state = initState, action) => {
         lastName: action.payload.lastName,
         simplifiedRoute: action.payload.simplifiedRoute,
         connections: action.payload.connections,
+        token: action.payload.token,
         userError: false,
         userLoading: false
       }
@@ -103,6 +107,7 @@ const userReducer = (state = initState, action) => {
         lastName: action.payload.lastName,
         simplifiedRoute: action.payload.simplifiedRoute,
         connections: action.payload.connections,
+        token: action.payload.token,
         userError: false,
         userLoading: false
       }

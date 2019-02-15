@@ -5,9 +5,12 @@ import com.carpool.connection.Connection;
 import com.carpool.connection.ConnectionRepository;
 import com.carpool.google.*;
 import com.carpool.google.config.GoogleService;
+import com.carpool.services.UserService;
 import com.carpool.users.SimplifiedUser;
 import com.carpool.users.User;
 import com.carpool.users.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,12 +25,16 @@ public class UserController {
     private final BusinessRepository businessRepository;
     private final ConnectionRepository connectionRepository;
     private final GoogleService googleService;
+    private final UserService userService;
+    private final PasswordEncoder encoder;
 
-    public UserController(UserRepository userRepository, BusinessRepository businessRepository, ConnectionRepository connectionRepository, GoogleService googleService) {
+    public UserController(UserRepository userRepository, BusinessRepository businessRepository, ConnectionRepository connectionRepository, GoogleService googleService, UserService userService) {
         this.userRepository = userRepository;
         this.businessRepository = businessRepository;
         this.connectionRepository = connectionRepository;
         this.googleService = googleService;
+        this.userService = userService;
+        this.encoder = new BCryptPasswordEncoder();
     }
 
     @PostMapping("/login")
@@ -35,16 +42,18 @@ public class UserController {
         String email = login.getEmail();
         String password = login.getPassword();
         User user = this.userRepository.findUserByEmail(email);
-        if(user.getPassword().equals(password)) {
+        if(encoder.matches(password, user.getPassword())) {
+            String token = this.userService.saveUser(user);
+            user.setToken(token);
             return user;
         }
         return null;
     }
 
     @PostMapping("/register")
-    public User createUser(@RequestBody User user) {
-        this.userRepository.insert(user);
-        return user;
+    public String createUser(@RequestBody User user) {
+        user.setPassword(encoder.encode(user.getPassword()));
+        return this.userRepository.save(user).getId();
     }
 
     @GetMapping("/get/{id}")
