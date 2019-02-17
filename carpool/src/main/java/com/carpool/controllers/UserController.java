@@ -5,6 +5,7 @@ import com.carpool.connection.Connection;
 import com.carpool.connection.ConnectionRepository;
 import com.carpool.google.*;
 import com.carpool.google.config.GoogleService;
+import com.carpool.services.TokenService;
 import com.carpool.services.UserService;
 import com.carpool.users.SimplifiedUser;
 import com.carpool.users.User;
@@ -27,14 +28,16 @@ public class UserController {
     private final GoogleService googleService;
     private final UserService userService;
     private final PasswordEncoder encoder;
+    private final TokenService tokenService;
 
-    public UserController(UserRepository userRepository, BusinessRepository businessRepository, ConnectionRepository connectionRepository, GoogleService googleService, UserService userService) {
+    public UserController(UserRepository userRepository, BusinessRepository businessRepository, ConnectionRepository connectionRepository, GoogleService googleService, UserService userService, TokenService tokenService) {
         this.userRepository = userRepository;
         this.businessRepository = businessRepository;
         this.connectionRepository = connectionRepository;
         this.googleService = googleService;
         this.userService = userService;
         this.encoder = new BCryptPasswordEncoder();
+        this.tokenService = tokenService;
     }
 
     @PostMapping("/login")
@@ -65,6 +68,11 @@ public class UserController {
     public SimplifiedUser userSimpleGetById(@PathVariable String id) {
         User user = this.userRepository.findUserById(id);
         return new SimplifiedUser(user.getId(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getBusinessId(), 0.0, 0.0);
+    }
+
+    @GetMapping("/token/{token}")
+    public User getUserOffToken(@PathVariable String token) {
+        return this.userRepository.findUserById(this.tokenService.getUserIdFromToken(token));
     }
 
     @GetMapping("/all")

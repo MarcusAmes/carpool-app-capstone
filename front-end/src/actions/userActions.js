@@ -35,6 +35,7 @@ const addRouteError = ( ) => ({ type: ADD_ROUTE_ERROR });
 export const FETCH_USER_CONNECTIONS = "FETCH_USER_CONNECTIONS";
 const fetchUserConnections = (user) => ({ type: FETCH_USER_CONNECTIONS, payload: user })
 
+
 //THUNKS
 
 export const login = (user, history) => dispatch => {
@@ -93,6 +94,13 @@ export const addRoute = (user) => dispatch => {
     dispatch(
       addRouteError()
     )
+  })
+}
+
+export const getUserFromToken = (token) => {
+  axios.get(`/users/token/${token}`)
+  .then(response => {
+    fetchUserConnections(response.data)
   })
 }
 

@@ -58,6 +58,7 @@ const userReducer = (state = initState, action) => {
         userLoading: false
       }
     case LOGOUT_SUCCESS:
+      localStorage.removeItem("token")
       return {
         ...state,
         id: "",

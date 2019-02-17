@@ -18,7 +18,7 @@ class HomePage extends Component {
 
   render() {
 
-    if(!this.props.user.id) {
+    if(!localStorage.getItem("token")) {
       return(
         <Redirect to="/" />
       )
@@ -46,6 +46,7 @@ class HomePage extends Component {
     
     return (
       <>
+        {localStorage.getItem("token") && !this.props.user.id ? this.props.getUser(localStorage.getItem("token")) : null}
         {this.props.user.connections.length !== this.props.connections.length ? this.props.fetchConnections(this.props.user.connections) : null}
         {this.props.connections.filter(connection => connection.user1Accept && connection.user2Accept).length > 0 &&
         <ConnectionMapContainer />}
