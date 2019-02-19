@@ -5,9 +5,13 @@ import com.carpool.connection.Connection;
 import com.carpool.connection.ConnectionRepository;
 import com.carpool.google.*;
 import com.carpool.google.config.GoogleService;
+import com.carpool.services.TokenService;
+import com.carpool.services.UserService;
 import com.carpool.users.SimplifiedUser;
 import com.carpool.users.User;
 import com.carpool.users.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,12 +26,18 @@ public class UserController {
     private final BusinessRepository businessRepository;
     private final ConnectionRepository connectionRepository;
     private final GoogleService googleService;
+    private final UserService userService;
+    private final PasswordEncoder encoder;
+    private final TokenService tokenService;
 
-    public UserController(UserRepository userRepository, BusinessRepository businessRepository, ConnectionRepository connectionRepository, GoogleService googleService) {
+    public UserController(UserRepository userRepository, BusinessRepository businessRepository, ConnectionRepository connectionRepository, GoogleService googleService, UserService userService, TokenService tokenService) {
         this.userRepository = userRepository;
         this.businessRepository = businessRepository;
         this.connectionRepository = connectionRepository;
         this.googleService = googleService;
+        this.userService = userService;
+        this.encoder = new BCryptPasswordEncoder();
+        this.tokenService = tokenService;
     }
 
     @PostMapping("/login")
@@ -35,16 +45,18 @@ public class UserController {
         String email = login.getEmail();
         String password = login.getPassword();
         User user = this.userRepository.findUserByEmail(email);
-        if(user.getPassword().equals(password)) {
+        if(encoder.matches(password, user.getPassword())) {
+            String token = this.userService.saveUser(user);
+            user.setToken(token);
             return user;
         }
         return null;
     }
 
     @PostMapping("/register")
-    public User createUser(@RequestBody User user) {
-        this.userRepository.insert(user);
-        return user;
+    public String createUser(@RequestBody User user) {
+        user.setPassword(encoder.encode(user.getPassword()));
+        return this.userRepository.save(user).getId();
     }
 
     @GetMapping("/get/{id}")
@@ -56,6 +68,11 @@ public class UserController {
     public SimplifiedUser userSimpleGetById(@PathVariable String id) {
         User user = this.userRepository.findUserById(id);
         return new SimplifiedUser(user.getId(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getBusinessId(), 0.0, 0.0);
+    }
+
+    @GetMapping("/token/{token}")
+    public User getUserOffToken(@PathVariable String token) {
+        return this.userRepository.findUserById(this.tokenService.getUserIdFromToken(token));
     }
 
     @GetMapping("/all")
@@ -171,10 +188,10 @@ public class UserController {
 //        System.out.println(weight);
         if(smallPercent > 0.5 || bigPercent > 0.5){
             if(smallPercent < bigPercent) {
-                Connection connection = new Connection(smallUser.getSimplified(), bigUser.getSimplified(), bigPercent);
+                Connection connection = new Connection(smallUser.getSimplified(), bigUser.getSimplified(), bigPercent, big.getDistance().getMetersInMiles());
                 return this.connectionRepository.insert(connection).getId();
             } else {
-                Connection connection = new Connection(bigUser.getSimplified(), smallUser.getSimplified(), smallPercent);
+                Connection connection = new Connection(bigUser.getSimplified(), smallUser.getSimplified(), smallPercent, small.getDistance().getMetersInMiles());
                 return this.connectionRepository.insert(connection).getId();
             }
         }

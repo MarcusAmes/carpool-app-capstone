@@ -5,6 +5,7 @@ import RegisterFormContainer from './containers/RegisterFormContainer';
 import HomePageContainer from './containers/HomePageContainer';
 import TopNavContainer from './containers/TopNavContainer';
 import ProfilePage from './components/ProfilePage';
+import MapPageContainer from './containers/MapPageContainer';
 
 
 class App extends Component {
@@ -16,6 +17,7 @@ class App extends Component {
           <Route exact path="/" component={Splash} />
           <Route exact path="/register" component={RegisterFormContainer} />
           <Route exact path="/carpool/home" component={HomePageContainer} />
+          <Route exact path="/carpool/map" component={MapPageContainer} />
           <Route exact path="/carpool/profile/:id" component={ProfilePage} />
         </Switch>
       </div>
