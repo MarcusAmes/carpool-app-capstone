@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import axios from '../axios'
+import NewBusinessContainer from '../containers/NewBusinessContainer';
 
 class AddBusinessForm extends Component {
 
   state = {
     city: "",
-    buisnesses: [],
-    buisness: "",
-    picked: false
+    businesses: [],
+    business: "",
+    picked: false,
+    noBusiness: false
   }
 
   _onChange = ({target}) => {
@@ -20,13 +22,17 @@ class AddBusinessForm extends Component {
     this.setState({picked: true})
     axios.get(`/business/${this.state.city}`)
       .then(response => {
-        this.setState({ buisnesses: response.data, buisness: response.data[0].name })
+        if(response.data.length) {
+          this.setState({ businesses: response.data, business: response.data[0].name })
+        } else {
+          this.setState({noBusiness: true})
+        }
       })
   }
 
   _onSubmit = (e) => {
-    e.preventDefault()
-    let businessId = this.state.buisnesses.filter(business => business.name === this.state.buisness)[0].id
+    e.preventDefault() 
+    let businessId = this.state.businesses.filter(business => business.name.trim() === this.state.business.trim())[0].id
     this.props.addRoute({userId: this.props.user.id, businessId})
   }
 
@@ -44,19 +50,25 @@ class AddBusinessForm extends Component {
       )
     }
 
-    const options = this.state.buisnesses.map(business => <option key={business.id}> {business.name} </option>)
+    if(this.state.noBusiness) {
+      return (
+        <NewBusinessContainer />
+      )
+    }
+
+    const options = this.state.businesses.map(business => <option key={business.id}> {business.name} </option>)
     return (
       <div>
         <Form onSubmit={this._onSubmit}>
           <FormGroup>
-            <Label for="buisness">Select Business</Label>
+            <Label for="business">Select Business</Label>
             <Input onChange={this._onChange} type="select" name="business">
               {options}
             </Input>
           </FormGroup>
           <Button color="success">Submit</Button>
         </Form>
-        <p>Don't see yours. Add it here.</p>
+        <Button onClick={() => this.setState({noBusiness: true})}>Don't see yours. Add it here.</Button>
       </div>
     )
   }

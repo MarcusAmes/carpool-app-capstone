@@ -19,7 +19,7 @@ public class Business {
                     @JsonProperty("city") String city) {
         this.name = name;
         this.address = address;
-        this.city = city;
+        this.city = city.toLowerCase();
     }
 
     public String getCity() {

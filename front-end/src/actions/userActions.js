@@ -35,6 +35,9 @@ const addRouteError = ( ) => ({ type: ADD_ROUTE_ERROR });
 export const FETCH_USER_CONNECTIONS = "FETCH_USER_CONNECTIONS";
 const fetchUserConnections = (user) => ({ type: FETCH_USER_CONNECTIONS, payload: user })
 
+export const NEW_BUSINESS_SUCCESS = "NEW_BUSINESS_SUCCESS";
+const newBusinessSuccess = () => ({ type: NEW_BUSINESS_SUCCESS })
+
 
 //THUNKS
 
@@ -110,6 +113,21 @@ export const fetchUserConnection = (id) => dispatch => {
     dispatch(
       fetchUserConnections(response.data)
     )
+  })
+}
+
+export const newBusiness = (business, userId, history) => dispatch => {
+  axios.post(`/business/add`, business)
+  .then(response => {
+    console.log(response.data.id);
+    console.log(userId);
+    dispatch(
+      addRoute({userId, businessId: response.data.id})
+    )
+    // history.push('/carpool/home')
+  })
+  .catch(err => {
+    console.log(err);
   })
 }
 

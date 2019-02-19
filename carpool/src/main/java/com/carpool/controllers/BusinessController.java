@@ -2,10 +2,7 @@ package com.carpool.controllers;
 
 import com.carpool.business.Business;
 import com.carpool.business.BusinessRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,6 +17,11 @@ public class BusinessController {
 
     @GetMapping("/{city}")
     public List<Business> getBusinessesByCity(@PathVariable String city) {
-        return this.businessRepository.findBusinessesByCity(city);
+        return this.businessRepository.findBusinessesByCity(city.toLowerCase());
+    }
+
+    @PostMapping("/add")
+    public Business addBuisness(@RequestBody Business business) {
+        return this.businessRepository.save(business);
     }
 }

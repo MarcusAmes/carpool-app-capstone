@@ -1,12 +1,10 @@
 import React, { Component } from 'react'
 import { Col, Button, Form, FormGroup, Label, Input, Row, Container } from 'reactstrap';
+import { withRouter } from 'react-router-dom'
 
-class RegisterForm extends Component {
+class NewBusinessForm extends Component {
   state = {
-    email: "",
-    password: "",
-    firstName: "",
-    lastName: "",
+    name: "",
     address: "",
     city: "",
     state: "",
@@ -17,50 +15,28 @@ class RegisterForm extends Component {
     e.preventDefault();
     let address = `${this.state.address}, ${this.state.city}, ${this.state.state} ${this.state.zip}`
     let obj = {
-      email: this.state.email,
-      password: this.state.password,
-      firstName: this.state.firstName,
-      lastName: this.state.lastName,
-      address
+      name: this.state.name,
+      address,
+      city: this.state.city
     }
-    this.props.register(obj, this.props.history)
+    this.props.newBusiness(obj, this.props.user.id, this.props.history)
   }
 
-  _onChange = ({target}) => {
-    this.setState({[target.name]: target.value})
+  _onChange = ({ target }) => {
+    this.setState({ [target.name]: target.value })
   }
 
 
   render() {
-    
+
     return (
       <Container>
         <Form onSubmit={this._onSubmit}>
           <Row form>
             <Col md={6}>
               <FormGroup>
-                <Label for="email">Email</Label>
-                <Input onChange={this._onChange} value={this.state.email} type="email" name="email" placeholder="Email" />
-              </FormGroup>
-            </Col>
-            <Col md={6}>
-              <FormGroup>
-                <Label for="password">Password</Label>
-                <Input onChange={this._onChange} value={this.state.password} type="password" name="password" placeholder="Password" />
-              </FormGroup>
-            </Col>
-          </Row>
-          <Row form>
-            <Col md={6}>
-              <FormGroup>
-                <Label for="firstName">First Name</Label>
-                <Input onChange={this._onChange} value={this.state.firstName} type="text" name="firstName" placeholder="First Name" />
-              </FormGroup>
-            </Col>
-            <Col md={6}>
-              <FormGroup>
-                <Label for="lastName">Last Name</Label>
-                <Input onChange={this._onChange} value={this.state.lastName} type="text" name="lastName" placeholder="Last Name" />
+                <Label for="name">Name of Business</Label>
+                <Input onChange={this._onChange} value={this.state.name} type="text" name="name" placeholder="Name of Business" />
               </FormGroup>
             </Col>
           </Row>
@@ -88,11 +64,11 @@ class RegisterForm extends Component {
               </FormGroup>
             </Col>
           </Row>
-          <Button color="success">Sign Up</Button>
+          <Button color="success">Add Business</Button>
         </Form>
       </Container>
     )
   }
 }
 
-export default RegisterForm
+export default withRouter(NewBusinessForm)
