@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import AddBusinessFormContainer from '../containers/AddBusinessFormContainer';
 import ConnectCardContainer from '../containers/ConnectCardContainer';
 import { ListGroup } from 'reactstrap';
-import ConnectionMapContainer from '../containers/ConnectionMapContainer';
 import { Redirect } from 'react-router-dom'
 
 class HomePage extends Component {
@@ -48,8 +47,6 @@ class HomePage extends Component {
       <>
         {localStorage.getItem("token") && !this.props.user.id ? this.props.getUser(localStorage.getItem("token")) : null}
         {this.props.user.connections.length !== this.props.connections.length ? this.props.fetchConnections(this.props.user.connections) : null}
-        {this.props.connections.filter(connection => connection.user1Accept && connection.user2Accept).length > 0 &&
-        <ConnectionMapContainer />}
         <ListGroup>
           {cards}
         </ListGroup>

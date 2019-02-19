@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.text.DecimalFormat;
+
 @Document(collection = "Connections")
 public class Connection {
     @Id
@@ -14,15 +16,20 @@ public class Connection {
     private boolean user1Accept;
     private boolean user2Accept;
     private final double percent;
+    private final double distance;
+    private double miles;
 
     public Connection(@JsonProperty("user") SimplifiedUser user1,
                       @JsonProperty("user2") SimplifiedUser user2,
-                      @JsonProperty("percent") double percent) {
+                      @JsonProperty("percent") double percent,
+                      @JsonProperty("distance") double distance) {
         this.user1 = user1;
         this.user2 = user2;
         this.user1Accept = false;
         this.user2Accept = false;
         this.percent = percent;
+        this.distance = distance;
+        this.miles = 0;
     }
 
     public String getId() {
@@ -59,5 +66,19 @@ public class Connection {
 
     public void setUser2Accept(boolean user2Accept) {
         this.user2Accept = user2Accept;
+    }
+
+    public double getMiles() {
+        return miles;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void addDistance() {
+        DecimalFormat df = new DecimalFormat("#.00");
+        Double temp = this.miles + this.distance;
+        this.miles = Double.valueOf(df.format(temp));
     }
 }

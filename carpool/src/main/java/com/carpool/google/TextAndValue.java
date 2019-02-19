@@ -1,5 +1,5 @@
 package com.carpool.google;
-
+import java.text.DecimalFormat;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -13,6 +13,12 @@ public class TextAndValue {
                         @JsonProperty("value") double value) {
         this.text = text;
         this.value = value;
+    }
+
+    public double getMetersInMiles() {
+        DecimalFormat df = new DecimalFormat("#.00");
+
+        return Double.valueOf(df.format(value * 0.00062137));
     }
 
     public String getText() {

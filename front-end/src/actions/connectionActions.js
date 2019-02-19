@@ -22,6 +22,9 @@ const addConnectionError = () => ({ type: ADD_CONNECTION_ERROR });
 export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS"
 const logoutSuccess = () => ({ type: LOGOUT_SUCCESS })
 
+export const ADD_DISTANCE_SUCCESS = "ADD_DISTANCE_SUCCESS"
+const addDistanceSuccess = (connection) => ({ type: ADD_DISTANCE_SUCCESS, payload: connection })
+
 
 //THUNKS
 
@@ -61,8 +64,18 @@ export const addConnection = (connectionId, userId) => dispatch => {
 
 export const logoutC = () => dispatch => {
   dispatch(
-    dispatch(
-      logoutSuccess()
-    )
+    logoutSuccess()
   )
+}
+
+export const addDistance = (id) => dispatch => {
+  axios.get(`/connections/add/${id}`)
+  .then(response => {
+    dispatch(
+      addDistanceSuccess(response.data)
+    )
+  })
+  .catch(err => {
+    console.log(err)
+  })
 }

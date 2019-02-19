@@ -18,7 +18,7 @@ class TopNav extends Component {
           <NavbarBrand tag={Link} to="/carpool/home">Carpool</NavbarBrand>
           <Nav className="ml-auto" navbar>
             <NavItem>
-              <NavLink tag={Link} to="/carpool/connections">Connections</NavLink>
+              <NavLink tag={Link} to="/carpool/map">Map</NavLink>
             </NavItem>
             <NavItem>
               <NavLink tag={Link} to={`/carpool/profile/${this.props.userId}`}>Profile</NavLink>

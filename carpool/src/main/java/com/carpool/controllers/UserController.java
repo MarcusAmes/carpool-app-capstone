@@ -188,10 +188,10 @@ public class UserController {
 //        System.out.println(weight);
         if(smallPercent > 0.5 || bigPercent > 0.5){
             if(smallPercent < bigPercent) {
-                Connection connection = new Connection(smallUser.getSimplified(), bigUser.getSimplified(), bigPercent);
+                Connection connection = new Connection(smallUser.getSimplified(), bigUser.getSimplified(), bigPercent, big.getDistance().getMetersInMiles());
                 return this.connectionRepository.insert(connection).getId();
             } else {
-                Connection connection = new Connection(bigUser.getSimplified(), smallUser.getSimplified(), smallPercent);
+                Connection connection = new Connection(bigUser.getSimplified(), smallUser.getSimplified(), smallPercent, small.getDistance().getMetersInMiles());
                 return this.connectionRepository.insert(connection).getId();
             }
         }
