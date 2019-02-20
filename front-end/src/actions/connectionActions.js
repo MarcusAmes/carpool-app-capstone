@@ -28,6 +28,15 @@ const addDistanceSuccess = (connection) => ({ type: ADD_DISTANCE_SUCCESS, payloa
 export const REMOVE_CONNECTION_SUCCESS = "REMOVE_CONNECTION_SUCCESS";
 const removeConnectionSuccess = (connection) => ({ type: REMOVE_CONNECTION_SUCCESS, payload: connection })
 
+export const REMOVE_DATE_SUCCESS = "REMOVE_DATE_SUCCESS";
+const removeDateSuccess = (connection) => ({ type: REMOVE_DATE_SUCCESS, payload: connection })
+
+export const ADD_MESSAGE_SUCCESS = "ADD_MESSAGE_SUCCESS"
+const addMessageSuccess = (connection) => ({ type: ADD_MESSAGE_SUCCESS, payload: connection })
+
+export const REMOVE_MESSAGE_SUCCESS = "REMOVE_MESSAGE_SUCCESS";
+const removeMessageSuccess = (connection) => ({ type: REMOVE_MESSAGE_SUCCESS, payload: connection })
+
 
 //THUNKS
 
@@ -101,4 +110,42 @@ export const disconnectConnection = (id) => dispatch => {
   .catch(err => {
     console.log(err)
   })
+}
+
+export const removeDate = (id, date) => dispatch => {
+  axios.get(`/connections/remove/date/${id}/${date}`, getConfig())
+    .then(response => {
+      dispatch(
+        removeDateSuccess(response.data)
+      )
+    })
+    .catch(err => {
+      console.log(err)
+    })
+}
+
+export const sendMessage = (id, message) => dispatch => {
+  axios.post(`/connections/add/message/${id}`, message, getConfig())
+    .then(response => {
+      dispatch(
+        addMessageSuccess(response.data)
+      )
+    })
+    .catch(err => {
+      dispatch(
+        console.log(err)
+      )
+    })
+}
+
+export const removeMessage = (id, date) => dispatch => {
+  axios.get(`/connections/remove/message/${id}/${date}`, getConfig())
+    .then(response => {
+      dispatch(
+        removeMessageSuccess(response.data)
+      )
+    })
+    .catch(err => {
+      console.log(err)
+    })
 }

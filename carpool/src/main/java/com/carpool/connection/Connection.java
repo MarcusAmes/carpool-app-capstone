@@ -23,6 +23,7 @@ public class Connection {
     private double miles;
     private boolean declined;
     private List<Date> dates;
+    private List<Message> messages;
 
     public Connection(@JsonProperty("user") SimplifiedUser user1,
                       @JsonProperty("user2") SimplifiedUser user2,
@@ -106,6 +107,43 @@ public class Connection {
             this.dates.add(new Date());
         }
     }
+
+    public void removeDate(Date date) {
+        if(this.dates != null) {
+            this.dates.remove(date);
+            DecimalFormat df = new DecimalFormat("#.00");
+            Double temp = this.miles - this.distance;
+            this.miles = Double.valueOf(df.format(temp));
+        }
+    }
+
+    public void addMessage(String userId, String message) {
+        if(this.messages == null) {
+            this.messages = new ArrayList<>();
+            this.messages.add(new Message(userId, message, new Date()));
+        } else {
+            this.messages.add(new Message(userId, message, new Date()));
+        }
+    }
+
+    public void removeMessage(Date date) {
+        if(this.messages != null) {
+            for (int i = 0; i < this.messages.size(); i++) {
+                if (this.messages.get(i).getDate().equals(date)) {
+                    this.messages.remove(i);
+                    break;
+                }
+            }
+        }
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }
+
 
     public void addDistance() {
         DecimalFormat df = new DecimalFormat("#.00");

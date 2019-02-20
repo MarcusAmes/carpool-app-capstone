@@ -1,4 +1,4 @@
-import { FETCH_CONNECTIONS_LOADING, FETCH_CONNECTIONS_ERROR, FETCH_CONNECTIONS_SUCCESS, ADD_CONNECTION_LOADING, ADD_CONNECTION_ERROR, ADD_CONNECTION_SUCCESS, LOGOUT_SUCCESS, ADD_DISTANCE_SUCCESS, REMOVE_CONNECTION_SUCCESS } from "../actions/connectionActions";
+import { FETCH_CONNECTIONS_LOADING, FETCH_CONNECTIONS_ERROR, FETCH_CONNECTIONS_SUCCESS, ADD_CONNECTION_LOADING, ADD_CONNECTION_ERROR, ADD_CONNECTION_SUCCESS, LOGOUT_SUCCESS, ADD_DISTANCE_SUCCESS, REMOVE_CONNECTION_SUCCESS, REMOVE_DATE_SUCCESS, ADD_MESSAGE_SUCCESS, REMOVE_MESSAGE_SUCCESS } from "../actions/connectionActions";
 
 const initState = {
   connections: [],
@@ -57,6 +57,21 @@ const connectionReducer = (state = initState, action) => {
         connections: state.connections.map(connection => connection.id === action.payload.id ? action.payload : connection)
       }
     case REMOVE_CONNECTION_SUCCESS:
+      return {
+        ...state,
+        connections: state.connections.map(connection => connection.id === action.payload.id ? action.payload : connection)
+      }
+    case REMOVE_DATE_SUCCESS:
+      return {
+        ...state,
+        connections: state.connections.map(connection => connection.id === action.payload.id ? action.payload : connection)
+      }
+    case ADD_MESSAGE_SUCCESS:
+      return {
+        ...state,
+        connections: state.connections.map(connection => connection.id === action.payload.id ? action.payload : connection)
+      }
+    case REMOVE_MESSAGE_SUCCESS:
       return {
         ...state,
         connections: state.connections.map(connection => connection.id === action.payload.id ? action.payload : connection)

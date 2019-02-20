@@ -23,13 +23,13 @@ class TopNav extends Component {
         <Container>
           <NavbarBrand tag={Link} to="/carpool/home">Carpool</NavbarBrand>
           <Nav className="ml-auto" navbar>
-            <NavItem>
+            <NavItem active={this.props.location.pathname.includes("/home")}>
               <NavLink tag={Link} to="/carpool/home">Home</NavLink>
             </NavItem>
-            <NavItem>
+            <NavItem active={this.props.location.pathname.includes("/carpool/carpool")}>
               <NavLink tag={Link} to="/carpool/carpool">Carpool</NavLink>
             </NavItem>
-            <NavItem>
+            <NavItem active={this.props.location.pathname.includes("/profile")}>
               <NavLink tag={Link} to={`/carpool/profile/${this.props.userId}`}>Profile</NavLink>
             </NavItem>
             <NavItem style={{cursor: "pointer"}}>
