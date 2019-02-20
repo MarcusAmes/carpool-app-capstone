@@ -17,7 +17,7 @@ class App extends Component {
           <Route exact path="/" component={Splash} />
           <Route exact path="/register" component={RegisterFormContainer} />
           <Route exact path="/carpool/home" component={HomePageContainer} />
-          <Route exact path="/carpool/map" component={MapPageContainer} />
+          <Route exact path="/carpool/carpool" component={MapPageContainer} />
           <Route exact path="/carpool/profile/:id" component={ProfilePage} />
         </Switch>
       </div>

@@ -1,14 +1,11 @@
 import React, { Component } from 'react'
 import ConnectionMapContainer from '../containers/ConnectionMapContainer';
-import { Button } from 'reactstrap'
+import { Button, Container } from 'reactstrap'
 
 
 class MapPage extends Component {
 
   componentDidMount() {
-    if (this.props.userId) {
-      this.props.fetchUserConnections(this.props.userId)
-    }
     if (this.props.user.connections && this.props.user.connections.length) {
       this.props.fetchConnections(this.props.user.connections)
     }
@@ -18,9 +15,14 @@ class MapPage extends Component {
     this.props.addDistance(id)
   }
 
+  _onDisconnect = (id) => {
+    console.log(id)
+    this.props.disconnect(id)
+  }
+
   render() {
 
-    const confirmedConnection = this.props.connections.filter(connection => connection.user1Accept && connection.user2Accept)[0];
+    const confirmedConnection = this.props.connections.filter(connection => connection.user1Accept && connection.user2Accept && !connection.declined)[0];
 
     if(!confirmedConnection) {
       return (
@@ -38,9 +40,13 @@ class MapPage extends Component {
     return (
       <>
         <ConnectionMapContainer />
-        <h1>Carpooling with {`${otherUser.firstName} ${otherUser.lastName}`}</h1>
-        <h2>Miles Saved: {confirmedConnection.miles}</h2>
-        <Button onClick={() => this._onClick(confirmedConnection.id)}>Add Leg Traveled</Button>
+        <Container>
+          <h1>Carpooling with {`${otherUser.firstName} ${otherUser.lastName}`}</h1>
+          <h2>Leg Distance: {confirmedConnection.distance}</h2>
+          <h2>Miles Saved: {confirmedConnection.miles}</h2>
+          <Button color="success" onClick={() => this._onClick(confirmedConnection.id)}>Add Leg Traveled</Button>
+          <Button outline color="danger" onClick={() => this._onDisconnect(confirmedConnection.id)}>Disconnect</Button>
+        </Container>
       </>
     )
   }

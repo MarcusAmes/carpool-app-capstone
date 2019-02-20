@@ -26,4 +26,11 @@ public class ConnectionController {
         connection.addDistance();
         return this.connectionRepository.save(connection);
     }
+
+    @GetMapping("/remove/{id}")
+    public Connection removeConnection(@PathVariable String id) {
+        Connection connection = this.connectionRepository.findConnectionById(id);
+        connection.setDeclined(true);
+        return this.connectionRepository.save(connection);
+    }
 }

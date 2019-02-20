@@ -25,6 +25,9 @@ class HomePage extends Component {
       )
     }
 
+    const sortedConnections = this.props.connections.sort((a, b) => b.percent - a.percent)
+    const filterConnections = sortedConnections.filter(connection => !connection.declined)
+
     if(!this.props.user.businessId) {
       return (
         <>
@@ -34,7 +37,7 @@ class HomePage extends Component {
       )
     }
 
-    if (!this.props.user.connections || !this.props.user.connections.length) {
+    if (!this.props.user.connections || !this.props.user.connections.length || !filterConnections.length) {
       return (
         <>
           <h2> No matches yet. Check back soon</h2>
@@ -42,8 +45,8 @@ class HomePage extends Component {
       )
     }
 
-    const sortedConnections = this.props.connections.sort((a, b) => b.percent - a.percent)
-    const cards = sortedConnections.map(connection => <ConnectCardContainer connection={connection} key={connection.id} />)
+    
+    const cards = filterConnections.map(connection => <ConnectCardContainer connection={connection} key={connection.id} />)
     
     return (
       <Container>

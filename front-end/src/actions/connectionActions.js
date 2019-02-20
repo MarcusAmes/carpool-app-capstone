@@ -25,6 +25,9 @@ const logoutSuccess = () => ({ type: LOGOUT_SUCCESS })
 export const ADD_DISTANCE_SUCCESS = "ADD_DISTANCE_SUCCESS"
 const addDistanceSuccess = (connection) => ({ type: ADD_DISTANCE_SUCCESS, payload: connection })
 
+export const REMOVE_CONNECTION_SUCCESS = "REMOVE_CONNECTION_SUCCESS";
+const removeConnectionSuccess = (connection) => ({ type: REMOVE_CONNECTION_SUCCESS, payload: connection })
+
 
 //THUNKS
 
@@ -81,6 +84,18 @@ export const addDistance = (id) => dispatch => {
   .then(response => {
     dispatch(
       addDistanceSuccess(response.data)
+    )
+  })
+  .catch(err => {
+    console.log(err)
+  })
+}
+
+export const disconnectConnection = (id) => dispatch => {
+  axios.get(`/connections/remove/${id}`, getConfig())
+  .then(response => {
+    dispatch(
+      removeConnectionSuccess(response.data)
     )
   })
   .catch(err => {

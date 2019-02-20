@@ -18,6 +18,7 @@ public class Connection {
     private final double percent;
     private final double distance;
     private double miles;
+    private boolean declined;
 
     public Connection(@JsonProperty("user") SimplifiedUser user1,
                       @JsonProperty("user2") SimplifiedUser user2,
@@ -30,6 +31,7 @@ public class Connection {
         this.percent = percent;
         this.distance = distance;
         this.miles = 0;
+        this.declined = false;
     }
 
     public String getId() {
@@ -74,6 +76,14 @@ public class Connection {
 
     public double getDistance() {
         return distance;
+    }
+
+    public boolean isDeclined() {
+        return declined;
+    }
+
+    public void setDeclined(boolean declined) {
+        this.declined = declined;
     }
 
     public void addDistance() {
