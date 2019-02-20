@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 import MapPage from '../components/MapPage'
-import { addDistance } from '../actions/connectionActions';
+import { addDistance, fetchConnections } from '../actions/connectionActions';
+import { fetchUserConnection } from '../actions/userActions';
 
 const mapStateToProps = ({ user, connection }) => {
   return {
@@ -14,6 +15,16 @@ const mapDispatchToProps = dispatch => {
     addDistance: (id) => {
       dispatch(
         addDistance(id)
+      )
+    },
+    fetchUserConnections: (id) => {
+      dispatch(
+        fetchUserConnection(id)
+      )
+    },
+    fetchConnections: (connections) => {
+      dispatch(
+        fetchConnections(connections)
       )
     }
   }

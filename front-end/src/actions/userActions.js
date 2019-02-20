@@ -1,5 +1,4 @@
-import axios from '../axios'
-
+import axios from 'axios'
 //ACTIONS
 
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
@@ -35,17 +34,21 @@ const addRouteError = ( ) => ({ type: ADD_ROUTE_ERROR });
 export const FETCH_USER_CONNECTIONS = "FETCH_USER_CONNECTIONS";
 const fetchUserConnections = (user) => ({ type: FETCH_USER_CONNECTIONS, payload: user })
 
-export const NEW_BUSINESS_SUCCESS = "NEW_BUSINESS_SUCCESS";
-const newBusinessSuccess = () => ({ type: NEW_BUSINESS_SUCCESS })
-
-
 //THUNKS
+
+const getConfig = () => ({
+  baseURL: process.env.REACT_APP_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: localStorage.getItem('token')
+  }
+})
 
 export const login = (user, history) => dispatch => {
   dispatch(
     loginLoading()
   )
-  axios.post("/users/login", user)
+  axios.post("/users/login", user, getConfig())
   .then(response => {
     dispatch(
       loginSuccess(response.data)
@@ -63,7 +66,7 @@ export const register = (user, history) => dispatch => {
   dispatch(
     registerLoading()
   )
-  axios.post("/users/register", user)
+  axios.post("/users/register", user, getConfig())
     .then(response => {
       dispatch(
         registerSuccess(response.data)
@@ -87,7 +90,7 @@ export const addRoute = (user) => dispatch => {
   dispatch(
     addRouteLoading()
   )
-  axios.post("/users/add/route", user)
+  axios.post("/users/add/route", user, getConfig())
   .then(response => {
     dispatch(
       addRouteSuccess(response.data)
@@ -100,15 +103,20 @@ export const addRoute = (user) => dispatch => {
   })
 }
 
-export const getUserFromToken = (token) => {
-  axios.get(`/users/token/${token}`)
+export const getUserFromToken = (token) => dispatch => {
+  axios.get(`/users/token/${token}`, getConfig())
   .then(response => {
-    fetchUserConnections(response.data)
+    dispatch(
+      fetchUserConnections(response.data)
+    )
+  })
+  .catch(err => {
+    console.log(err)
   })
 }
 
 export const fetchUserConnection = (id) => dispatch => {
-  axios.get(`/users/get/${id}`)
+  axios.get(`/users/get/${id}`, getConfig())
   .then(response => {
     dispatch(
       fetchUserConnections(response.data)
@@ -116,15 +124,14 @@ export const fetchUserConnection = (id) => dispatch => {
   })
 }
 
-export const newBusiness = (business, userId, history) => dispatch => {
-  axios.post(`/business/add`, business)
+export const newBusiness = (business, userId) => dispatch => {
+  axios.post(`/business/add`, business, getConfig())
   .then(response => {
     console.log(response.data.id);
     console.log(userId);
     dispatch(
       addRoute({userId, businessId: response.data.id})
     )
-    // history.push('/carpool/home')
   })
   .catch(err => {
     console.log(err);

@@ -26,7 +26,7 @@ public class JWTFilter extends GenericFilterBean {
         HttpServletResponse response = (HttpServletResponse) res;
         String token = request.getHeader("Authorization");
 
-        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             response.addHeader("Access-Control-Allow-Headers", "Authorization");
             response.sendError(HttpServletResponse.SC_OK, "success");
             return;

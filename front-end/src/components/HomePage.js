@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
 import AddBusinessFormContainer from '../containers/AddBusinessFormContainer';
 import ConnectCardContainer from '../containers/ConnectCardContainer';
-import { ListGroup } from 'reactstrap';
+import { ListGroup, Container } from 'reactstrap';
 import { Redirect } from 'react-router-dom'
 
 class HomePage extends Component {
-
   componentDidMount() {
-    if(this.props.user.id) {
-      this.props.fetchUserConnections(this.props.user.id)
+    if (localStorage.getItem("token") && !this.props.userId) {
+      this.props.getUser(localStorage.getItem("token"))
+    }
+    if (this.props.userId) {
+      this.props.fetchUserConnections(this.props.userId)
     }
     if (this.props.user.connections && this.props.user.connections.length) {
       this.props.fetchConnections(this.props.user.connections)
@@ -44,13 +46,12 @@ class HomePage extends Component {
     const cards = sortedConnections.map(connection => <ConnectCardContainer connection={connection} key={connection.id} />)
     
     return (
-      <>
-        {localStorage.getItem("token") && !this.props.user.id ? this.props.getUser(localStorage.getItem("token")) : null}
+      <Container>
         {this.props.user.connections.length !== this.props.connections.length ? this.props.fetchConnections(this.props.user.connections) : null}
         <ListGroup>
           {cards}
         </ListGroup>
-      </>
+      </Container>
     )
   }
 }

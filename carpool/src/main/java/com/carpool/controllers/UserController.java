@@ -41,14 +41,12 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public User login(@RequestBody Login login) {
+    public String login(@RequestBody Login login) {
         String email = login.getEmail();
         String password = login.getPassword();
         User user = this.userRepository.findUserByEmail(email);
         if(encoder.matches(password, user.getPassword())) {
-            String token = this.userService.saveUser(user);
-            user.setToken(token);
-            return user;
+            return this.userService.saveUser(user);
         }
         return null;
     }
@@ -188,10 +186,10 @@ public class UserController {
 //        System.out.println(weight);
         if(smallPercent > 0.5 || bigPercent > 0.5){
             if(smallPercent < bigPercent) {
-                Connection connection = new Connection(smallUser.getSimplified(), bigUser.getSimplified(), bigPercent, big.getDistance().getMetersInMiles());
+                Connection connection = new Connection(smallUser.getSimplified(), bigUser.getSimplified(), bigPercent, small.getDistance().getMetersInMiles());
                 return this.connectionRepository.insert(connection).getId();
             } else {
-                Connection connection = new Connection(bigUser.getSimplified(), smallUser.getSimplified(), smallPercent, small.getDistance().getMetersInMiles());
+                Connection connection = new Connection(bigUser.getSimplified(), smallUser.getSimplified(), smallPercent, big.getDistance().getMetersInMiles());
                 return this.connectionRepository.insert(connection).getId();
             }
         }

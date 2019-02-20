@@ -7,10 +7,16 @@ import {
   NavLink,
   Container
 } from 'reactstrap';
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 
 class TopNav extends Component {
+
   render() {
+    if (!localStorage.getItem("token") && !this.props.userId) {
+      return (
+        <Redirect to="/" />
+      )
+    }
     
     return (
       <Navbar color="success" dark expand="md">

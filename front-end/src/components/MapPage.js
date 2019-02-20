@@ -5,6 +5,15 @@ import { Button } from 'reactstrap'
 
 class MapPage extends Component {
 
+  componentDidMount() {
+    if (this.props.userId) {
+      this.props.fetchUserConnections(this.props.userId)
+    }
+    if (this.props.user.connections && this.props.user.connections.length) {
+      this.props.fetchConnections(this.props.user.connections)
+    }
+  }
+
   _onClick = (id) => {
     this.props.addDistance(id)
   }

@@ -1,10 +1,11 @@
 import { connect } from 'react-redux'
 import TopNav from '../components/TopNav'
-import { logout } from '../actions/userActions';
+import { logout, getUserFromToken } from '../actions/userActions';
 import { logoutC } from '../actions/connectionActions';
 
 const mapStateToProps = ({user}) => {
   return {
+    user,
     userId: user.id
   }
 }
@@ -17,6 +18,11 @@ const mapDispatchToProps = dispatch => {
       )
       dispatch(
         logoutC()
+      )
+    },
+    getUser: (token) => {
+      dispatch (
+        getUserFromToken(token)
       )
     }
   }

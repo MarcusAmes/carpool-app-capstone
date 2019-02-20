@@ -20,7 +20,13 @@ class AddBusinessForm extends Component {
   _cityClick = (e) => {
     e.preventDefault();
     this.setState({picked: true})
-    axios.get(`/business/${this.state.city}`)
+    axios.get(`/business/${this.state.city}`, {
+      baseURL: process.env.REACT_APP_BASE_URL,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: localStorage.getItem('token')
+      }
+    })
       .then(response => {
         if(response.data.length) {
           this.setState({ businesses: response.data, business: response.data[0].name })
