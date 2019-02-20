@@ -6,6 +6,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Document(collection = "Connections")
 public class Connection {
@@ -19,6 +22,7 @@ public class Connection {
     private final double distance;
     private double miles;
     private boolean declined;
+    private List<Date> dates;
 
     public Connection(@JsonProperty("user") SimplifiedUser user1,
                       @JsonProperty("user2") SimplifiedUser user2,
@@ -84,6 +88,23 @@ public class Connection {
 
     public void setDeclined(boolean declined) {
         this.declined = declined;
+    }
+
+    public List<Date> getDates() {
+        return dates;
+    }
+
+    public void setDates(List<Date> dates) {
+        this.dates = dates;
+    }
+
+    public void addDate() {
+        if(this.dates == null) {
+            this.dates = new ArrayList<>();
+            this.dates.add(new Date());
+        } else {
+            this.dates.add(new Date());
+        }
     }
 
     public void addDistance() {

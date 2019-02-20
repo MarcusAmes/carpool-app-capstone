@@ -1,11 +1,18 @@
 import React, { Component } from 'react'
 import ConnectionMapContainer from '../containers/ConnectionMapContainer';
-import { Button, Container } from 'reactstrap'
-
+import { Button, Container, Row, Col, ListGroup, ListGroupItem, Jumbotron } from 'reactstrap'
+import { Redirect } from 'react-router-dom'
+import moment from 'moment'
 
 class MapPage extends Component {
 
   componentDidMount() {
+    if (this.props.userId) {
+      this.props.fetchUserConnections(this.props.userId)
+    }
+    if (localStorage.getItem("token") && !this.props.userId) {
+      this.props.getUser(localStorage.getItem("token"))
+    }
     if (this.props.user.connections && this.props.user.connections.length) {
       this.props.fetchConnections(this.props.user.connections)
     }
@@ -16,17 +23,26 @@ class MapPage extends Component {
   }
 
   _onDisconnect = (id) => {
-    console.log(id)
     this.props.disconnect(id)
   }
 
   render() {
+    if (!localStorage.getItem("token")) {
+      return (
+        <Redirect to="/" />
+      )
+    }
 
+    if (this.props.user.connections && !this.props.connections.length) {
+      this.props.fetchConnections(this.props.user.connections)
+    }
     const confirmedConnection = this.props.connections.filter(connection => connection.user1Accept && connection.user2Accept && !connection.declined)[0];
 
     if(!confirmedConnection) {
       return (
-        <h1>No accepted carpools yet.</h1>
+        <Container>
+          <h1>No accepted carpools yet.</h1>
+        </Container>
       )
     }
 
@@ -39,13 +55,34 @@ class MapPage extends Component {
 
     return (
       <>
-        <ConnectionMapContainer />
         <Container>
-          <h1>Carpooling with {`${otherUser.firstName} ${otherUser.lastName}`}</h1>
-          <h2>Leg Distance: {confirmedConnection.distance}</h2>
-          <h2>Miles Saved: {confirmedConnection.miles}</h2>
-          <Button color="success" onClick={() => this._onClick(confirmedConnection.id)}>Add Leg Traveled</Button>
-          <Button outline color="danger" onClick={() => this._onDisconnect(confirmedConnection.id)}>Disconnect</Button>
+          <ConnectionMapContainer />
+          <Row style={{marginTop: "2%"}}>
+            <Col md={8}> 
+              <Jumbotron>
+                <h1 className="display-5">Carpooling with {`${otherUser.firstName} ${otherUser.lastName}`}</h1>
+                <p className="lead">Leg Distance: {confirmedConnection.distance}</p>
+                <hr className="my-2" />
+                <p className="lead">Legs Traveled: {confirmedConnection.dates.length}</p>
+                <hr className="my-2" />
+                <p className="lead">Miles Saved: {confirmedConnection.miles}</p>
+                <p className="lead">
+                  <Button outline color="danger" onClick={() => this._onDisconnect(confirmedConnection.id)}>Disconnect</Button>
+                </p>
+              </Jumbotron>                   
+            </Col>
+            <Col style={{ height: "300px"}} md={4}>
+              <Button style={{width: "100%", marginBottom: "2%"}} color="success" onClick={() => this._onClick(confirmedConnection.id)}>Add Leg Traveled</Button>
+              <div style={{display: "flex", justifyContent: "center"}}>
+                Dates
+              </div>
+              <div style={{height: "100%", overflow: "auto" }}>
+                <ListGroup >
+                  {confirmedConnection.dates && confirmedConnection.dates.map(date => <ListGroupItem key={date} style={{display: "flex", justifyContent: "center", alignItems: "center"}}>{moment(date).format("MMM Do, h:mm A")}</ListGroupItem>)}
+                </ListGroup>
+              </div>
+            </Col>
+          </Row>
         </Container>
       </>
     )

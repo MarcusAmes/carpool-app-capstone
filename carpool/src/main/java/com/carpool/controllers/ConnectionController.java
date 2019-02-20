@@ -24,6 +24,7 @@ public class ConnectionController {
     public Connection addDistance(@PathVariable String id) {
         Connection connection = this.connectionRepository.findConnectionById(id);
         connection.addDistance();
+        connection.addDate();
         return this.connectionRepository.save(connection);
     }
 

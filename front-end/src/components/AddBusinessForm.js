@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Form, FormGroup, Input, Button, Modal, ModalHeader, ModalFooter, Container } from 'reactstrap';
 import axios from '../axios'
 import NewBusinessContainer from '../containers/NewBusinessContainer';
 
@@ -10,7 +10,8 @@ class AddBusinessForm extends Component {
     businesses: [],
     business: "",
     picked: false,
-    noBusiness: false
+    noBusiness: false,
+    modal: true
   }
 
   _onChange = ({target}) => {
@@ -19,21 +20,24 @@ class AddBusinessForm extends Component {
 
   _cityClick = (e) => {
     e.preventDefault();
-    this.setState({picked: true})
-    axios.get(`/business/${this.state.city}`, {
-      baseURL: process.env.REACT_APP_BASE_URL,
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: localStorage.getItem('token')
-      }
-    })
-      .then(response => {
-        if(response.data.length) {
-          this.setState({ businesses: response.data, business: response.data[0].name })
-        } else {
-          this.setState({noBusiness: true})
+    if(this.state.city.length) {
+      axios.get(`/business/${this.state.city}`, {
+        baseURL: process.env.REACT_APP_BASE_URL,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: localStorage.getItem('token')
         }
       })
+        .then(response => {
+          if(response.data.length) {
+            this.setState({picked: true, businesses: response.data, business: response.data[0].name })
+          } else {
+            this.setState({noBusiness: true})
+          }
+        })
+    } else {
+      this.setState({ noBusiness: true })
+    } 
   }
 
   _onSubmit = (e) => {
@@ -42,39 +46,68 @@ class AddBusinessForm extends Component {
     this.props.addRoute({userId: this.props.user.id, businessId})
   }
 
+  toggle = () => {
+    this.setState(prevState => ({
+      modal: !prevState.modal
+    }));
+  }
+
+  noBusinessChange = () => {
+    this.setState({noBusiness: !this.state.noBusiness})
+  }
+
+  resetCity = () => {
+    this.setState({
+      city: "",
+      businesses: [],
+      business: "",
+      picked: false,
+      noBusiness: false,
+      modal: true
+    })
+  }
+
   render() {
 
-    if(!this.state.picked) {
-      return (
-        <Form onSubmit={this._cityClick}>
-          <FormGroup>
-            <Label for="city">What city is your workplace in?</Label>
-            <Input onChange={this._onChange} value={this.state.city} type="text" name="city" placeholder="City" />
-          </FormGroup>
-          <Button color="success">Submit</Button>
-        </Form>
-      )
-    }
-
-    if(this.state.noBusiness) {
-      return (
-        <NewBusinessContainer />
-      )
-    }
-
-    const options = this.state.businesses.map(business => <option key={business.id}> {business.name} </option>)
     return (
+      
       <div>
-        <Form onSubmit={this._onSubmit}>
-          <FormGroup>
-            <Label for="business">Select Business</Label>
-            <Input onChange={this._onChange} type="select" name="business">
-              {options}
-            </Input>
-          </FormGroup>
-          <Button color="success">Submit</Button>
-        </Form>
-        <Button onClick={() => this.setState({noBusiness: true})}>Don't see yours. Add it here.</Button>
+        <Button color="danger" onClick={this.toggle}>{this.props.buttonLabel}</Button>
+        <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+          {this.state.noBusiness ? <NewBusinessContainer back={this.noBusinessChange} /> :
+            !this.state.picked ?
+              <Form onSubmit={this._cityClick}>
+                <ModalHeader style={{borderBottom: "none"}} toggle={this.toggle}>What city is your workplace in?</ModalHeader> 
+                <Container>
+                  <Input onChange={this._onChange} value={this.state.city} type="text" name="city" placeholder="City" />
+                </Container>
+                
+                <ModalFooter style={{ borderTop: "none" }}>
+                  <Button color="success">Submit</Button>
+                  <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+                </ModalFooter>
+              </Form>
+              :
+              <div>
+                <Form onSubmit={this._onSubmit}>
+                  <ModalHeader style={{ borderBottom: "none" }} toggle={this.toggle}>Select your business.</ModalHeader>
+                  <FormGroup>
+                    <Container>                
+                      <Input onChange={this._onChange} type="select" name="business">
+                        {this.state.businesses.map(business => <option key={business.id}> {business.name} </option>)}
+                      </Input>
+                    </Container>
+                  </FormGroup>
+                  <ModalFooter style={{ borderTop: "none" }}>
+                    <Button color="success">Submit</Button>
+                    <Button color="secondary" onClick={this.resetCity}>Back</Button>
+                  </ModalFooter>
+                </Form>
+                <Button onClick={() => this.setState({ noBusiness: true })}>Don't see yours. Add it here.</Button>
+              </div>
+            }
+          
+        </Modal>
       </div>
     )
   }
