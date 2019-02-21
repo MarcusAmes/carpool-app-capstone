@@ -53,7 +53,7 @@ export const login = (user, history) => dispatch => {
     dispatch(
       loginSuccess(response.data)
     )
-    history.push("/carpool/home")
+    history.push("/cartool/home")
   })
   .catch(err => {
     dispatch(

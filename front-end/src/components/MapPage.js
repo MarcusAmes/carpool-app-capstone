@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import ConnectionMapContainer from '../containers/ConnectionMapContainer';
-import { Button, Container, Row, Col, ListGroup, ListGroupItem, Jumbotron, Form, FormGroup, Input } from 'reactstrap'
+import HomePageContainer from '../containers/HomePageContainer';
+import { Button, Container, Row, Col, ListGroup, ListGroupItem, Jumbotron, Form, FormGroup, Input, ListGroupItemHeading, ListGroupItemText } from 'reactstrap'
 import { Redirect } from 'react-router-dom'
 import moment from 'moment'
 import { FaRegTrashAlt } from 'react-icons/fa'
@@ -41,6 +42,7 @@ class MapPage extends Component {
       message: this.state.message
     }
     this.props.sendMessage(id, obj)
+    this.setState({message: ""})
   }
 
   _onMessageRemove = (id, date) => {
@@ -65,9 +67,7 @@ class MapPage extends Component {
 
     if(!confirmedConnection) {
       return (
-        <Container>
-          <h1>No accepted carpools yet.</h1>
-        </Container>
+        <HomePageContainer />
       )
     }
 
@@ -108,31 +108,42 @@ class MapPage extends Component {
               </div>
             </Col>
           </Row>
+          <Row style={{ display: "flex", justifyContent: "center" }}>
+            <h2>
+              Messages
+            </h2>
+          </Row>
           <Row>
-            <Col>
+            <Col md={8} style={{ height: "500px" }}>
+              <div style={{ height: "100%", overflow: "auto" }}>
+                <ListGroup>
+                  {confirmedConnection.messages && confirmedConnection.messages.map((message, i) => 
+                  <ListGroupItem key={i}>
+                    <Row>
+                      <Col md={11}>
+                        <ListGroupItemHeading>
+                          {message.userId === this.props.user.id ? "Me" : otherUser.firstName} 
+                        </ListGroupItemHeading>
+                        <ListGroupItemText style={{overflowWrap: "break-word"}}>
+                          {message.message}
+                        </ListGroupItemText>
+                      </Col>
+                      <Col md={1}>                
+                        {this.props.user.id === message.userId && <FaRegTrashAlt style={{ cursor: "pointer", color: "#dc3545" }}
+                        onClick={() => this._onMessageRemove(confirmedConnection.id, message.date)}/>}
+                      </Col>
+                    </Row>
+                  </ListGroupItem>)}
+                </ListGroup>
+              </div>
+            </Col>
+            <Col md={4}>
               <Form onSubmit={(e) => this._onMessageSend(e, confirmedConnection.id)}>
                 <FormGroup>
-                  <Input onChange={this._onChange} value={this.state.message} type="textarea" name="message" placeholder="Message"/>
+                  <Input onChange={this._onChange} value={this.state.message} type="textarea" name="message" placeholder="Message" />
                 </FormGroup>
                 <Button color="success">Send</Button>
               </Form>
-            </Col>
-            <Col>
-              <ListGroup>
-                {confirmedConnection.messages && confirmedConnection.messages.map((message, i) => 
-                <ListGroupItem key={i}>
-                  <Row>
-                    <Col md={11}>
-                    {message.userId === this.props.user.id ? this.props.user.firstName : otherUser.firstName} 
-                    {": " + message.message}
-                    </Col>
-                      <Col md={1}>                
-                      {this.props.user.id === message.userId && <FaRegTrashAlt style={{ cursor: "pointer", color: "#dc3545" }}
-                      onClick={() => this._onMessageRemove(confirmedConnection.id, message.date)}/>}
-                    </Col>
-                  </Row>
-                </ListGroupItem>)}
-              </ListGroup>
             </Col>
           </Row>
         </Container>

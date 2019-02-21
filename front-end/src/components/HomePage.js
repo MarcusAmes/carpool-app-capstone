@@ -3,6 +3,7 @@ import AddBusinessFormContainer from '../containers/AddBusinessFormContainer';
 import ConnectCardContainer from '../containers/ConnectCardContainer';
 import { ListGroup, Container, Spinner } from 'reactstrap';
 import { Redirect } from 'react-router-dom'
+import NoMatches from './NoMatches';
 
 class HomePage extends Component {
   componentDidMount() {
@@ -47,7 +48,7 @@ class HomePage extends Component {
       return (
         <>
           {this.props.user.connections && this.props.user.connections.length !== this.props.connections.length ? this.props.fetchConnections(this.props.user.connections) : null}
-          <h2> No matches yet. Check back soon</h2>
+          <NoMatches />
         </>
       )
     }
@@ -58,6 +59,7 @@ class HomePage extends Component {
     return (
       <Container>
         {this.props.user.connections.length !== this.props.connections.length ? this.props.fetchConnections(this.props.user.connections) : null}
+        <h1>Possible Connections</h1>
         <ListGroup>
           {cards}
         </ListGroup>

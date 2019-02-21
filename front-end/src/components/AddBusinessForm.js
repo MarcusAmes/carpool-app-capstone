@@ -72,7 +72,7 @@ class AddBusinessForm extends Component {
     return (
       
       <div>
-        <Button color="danger" onClick={this.toggle}>{this.props.buttonLabel}</Button>
+        <Button outline color="success" onClick={this.toggle}>Get Started</Button>
         <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
           {this.state.noBusiness ? <NewBusinessContainer back={this.noBusinessChange} /> :
             !this.state.picked ?
@@ -103,7 +103,7 @@ class AddBusinessForm extends Component {
                     <Button color="secondary" onClick={this.resetCity}>Back</Button>
                   </ModalFooter>
                 </Form>
-                <Button onClick={() => this.setState({ noBusiness: true })}>Don't see yours. Add it here.</Button>
+                <Button outline color="dark" style={{marginBottom: "3%", marginLeft: "3%"}} onClick={() => this.setState({ noBusiness: true })}>Add business here</Button>
               </div>
             }
           
