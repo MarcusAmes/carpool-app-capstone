@@ -1,6 +1,6 @@
 /* global google */
 import React from 'react';
-import api from '../google'
+import { api } from '../secrets'
 const { compose, withProps, lifecycle } = require("recompose");
 const {
   withScriptjs,

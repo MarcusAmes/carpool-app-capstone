@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { baseUrl } from '../secrets'
 //ACTIONS
 
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
@@ -37,7 +38,7 @@ const fetchUserConnections = (user) => ({ type: FETCH_USER_CONNECTIONS, payload:
 //THUNKS
 
 const getConfig = () => ({
-  baseURL: process.env.REACT_APP_BASE_URL,
+  baseURL: baseUrl,
   headers: {
     'Content-Type': 'application/json',
     Authorization: localStorage.getItem('token')

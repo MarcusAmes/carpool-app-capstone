@@ -6,6 +6,7 @@
 .pnp.js
 google.js
 src/images
+secrets.js
 
 # testing
 /coverage

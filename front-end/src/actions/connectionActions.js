@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { baseUrl } from '../secrets'
 //ACTIONS
 
 export const FETCH_CONNECTIONS_SUCCESS = "FETCH_CONNECTIONS_SUCCESS"
@@ -41,7 +42,7 @@ const removeMessageSuccess = (connection) => ({ type: REMOVE_MESSAGE_SUCCESS, pa
 //THUNKS
 
 const getConfig = () => ({
-  baseURL: process.env.REACT_APP_BASE_URL,
+  baseURL: baseUrl,
   headers: {
     'Content-Type': 'application/json',
     Authorization: localStorage.getItem('token')
