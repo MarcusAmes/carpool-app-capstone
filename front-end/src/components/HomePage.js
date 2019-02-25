@@ -6,17 +6,6 @@ import { Redirect } from 'react-router-dom'
 import NoMatches from './NoMatches';
 
 class HomePage extends Component {
-  componentDidMount() {
-    if (this.props.userId) {
-      this.props.fetchUserConnections(this.props.userId)
-    }
-    if (localStorage.getItem("token") && !this.props.userId) {
-      this.props.getUser(localStorage.getItem("token"))
-    }
-    if (this.props.user.connections && this.props.user.connections.length) {
-      this.props.fetchConnections(this.props.user.connections)
-    }
-  }
 
   render() {
 
@@ -38,7 +27,10 @@ class HomePage extends Component {
     if(!this.props.user.businessId) {
       return (
         <Container>
-          <h2>Get started by adding your Workplace</h2>
+          <h2 style={{textAlign: "center"}}>Get started by adding your Workplace</h2>
+          <p style={{ textAlign: "center" }}>
+            Be sure to check back soon, and tell your peers. The more people using CarTool the better it works.
+          </p>
           <AddBusinessFormContainer />
         </Container>
       )
@@ -59,7 +51,7 @@ class HomePage extends Component {
     return (
       <Container>
         {this.props.user.connections.length !== this.props.connections.length ? this.props.fetchConnections(this.props.user.connections) : null}
-        <h1>Possible Connections</h1>
+        <h1 style={{textAlign: "center"}}>Possible Connections</h1>
         <ListGroup>
           {cards}
         </ListGroup>

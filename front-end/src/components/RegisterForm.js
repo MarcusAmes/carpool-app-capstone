@@ -35,6 +35,9 @@ class RegisterForm extends Component {
     
     return (
       <Container>
+      <h1 style={{textAlign: "center"}}>
+        Register
+      </h1>
         <Form onSubmit={this._onSubmit}>
           <Row form>
             <Col md={6}>

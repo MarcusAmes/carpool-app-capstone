@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Form, FormGroup, Input, Button, Modal, ModalHeader, ModalFooter, Container } from 'reactstrap';
 import axios from '../axios'
 import NewBusinessContainer from '../containers/NewBusinessContainer';
+import { baseUrl } from '../secrets'
 
 class AddBusinessForm extends Component {
 
@@ -22,7 +23,7 @@ class AddBusinessForm extends Component {
     e.preventDefault();
     if(this.state.city.length) {
       axios.get(`/business/${this.state.city}`, {
-        baseURL: process.env.REACT_APP_BASE_URL,
+        baseURL: baseUrl,
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.getItem('token')
